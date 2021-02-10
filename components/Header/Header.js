@@ -64,9 +64,6 @@ function Header(props) {
   } = props;
   const [menuList] = useState([
     createData(navMenu[0], '#' + navMenu[0], 200),
-    createData(navMenu[1], '#' + navMenu[1], 200),
-    createData(navMenu[2], '#' + navMenu[2], 200),
-    createData(navMenu[3], '#' + navMenu[3], 200),
   ]);
   const [openDrawer, setOpenDrawer] = useState(false);
   const handleOpenDrawer = () => {
@@ -74,7 +71,7 @@ function Header(props) {
   };
   return (
     <Fragment>
-      { isMobile && (<MobileMenu open={openDrawer} toggleDrawer={handleOpenDrawer} />) }
+      { isMobile && (<MobileMenu open={openDrawer} toggleDrawer={handleOpenDrawer} />)}
       <AppBar
         component="div"
         position="relative"
@@ -88,7 +85,7 @@ function Header(props) {
         <Container fixed={isDesktop}>
           <div className={classes.headerContent}>
             <nav className={clsx(classes.navLogo, invert && classes.invert)}>
-              { isMobile && (
+              {isMobile && (
                 <IconButton
                   onClick={handleOpenDrawer}
                   className={clsx('hamburger hamburger--spin', classes.mobileMenu, openDrawer && 'is-active')}
@@ -107,11 +104,11 @@ function Header(props) {
                     </a>
                   </Link>
                 ) : (
-                  <AnchorLink href="#home">
-                    <img src={logo} alt="logo" />
-                    {brand.agency.name}
-                  </AnchorLink>
-                )}
+                    <AnchorLink href="#home">
+                      <img src={logo} alt="logo" />
+                      {brand.agency.name}
+                    </AnchorLink>
+                  )}
               </div>
             </nav>
             <nav className={clsx(classes.navMenu, invert && classes.invert)}>
@@ -128,13 +125,23 @@ function Header(props) {
                           {t('common:agency-landing.header_' + item.name)}
                         </Button>
                       ) : (
-                        // eslint-disable-next-line
-                        <Button component={AnchorLink} offset={item.offset || 0} href={item.url}>
-                          {t('common:agency-landing.header_' + item.name)}
-                        </Button>
-                      )}
+                          // eslint-disable-next-line
+                          <Button component={AnchorLink} offset={item.offset || 0} href={item.url}>
+                            {t('common:agency-landing.header_' + item.name)}
+                          </Button>
+                        )}
                     </li>
                   ))}
+                  <li>
+                    <Button href={routeLink.agency.contact}>
+                      Investors
+                    </Button>
+                  </li>
+                  <li>
+                    <Button href={routeLink.agency.contact}>
+                      Startups
+                    </Button>
+                  </li>
                   <li>
                     <Button href={routeLink.agency.contact}>
                       {t('common:agency-landing.header_contact')}

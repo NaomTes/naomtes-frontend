@@ -75,7 +75,7 @@ function Landing(props) {
     <React.Fragment>
       <Head>
         <title>
-          { brand.agency.name }
+          {brand.agency.name}
           &nbsp; - Home Page
         </title>
       </Head>
@@ -93,24 +93,24 @@ function Landing(props) {
           <section className={isTablet ? classes.spaceTopShort : classes.spaceTop} id="about">
             <About />
           </section>
-          <section className={classes.spaceTop} id="services">
+          {/* <section className={classes.spaceTop} id="services">
             <Services />
-          </section>
-          <section className={isTablet ? classes.spaceTopShort : classes.spaceTop} id="our-expertise">
+          </section> */}
+          {/* <section className={isTablet ? classes.spaceTopShort : classes.spaceTop} id="our-expertise">
             <Expertise />
-          </section>
-          <section className={isMobile ? classes.spaceTopShort : classes.spaceTop} id="testimonials">
+          </section> */}
+          {/* <section className={isMobile ? classes.spaceTopShort : classes.spaceTop} id="testimonials">
             <Testimonials />
-          </section>
-          <section id="case-studies">
+          </section> */}
+          {/* <section id="case-studies">
             <CaseStudies />
-          </section>
-          <section className={classes.spaceTopShort} id="call-to-action">
+          </section> */}
+          {/* <section className={classes.spaceTopShort} id="call-to-action">
             <CallAction />
-          </section>
-          <section className={classes.spaceTopShort} id="address">
+          </section> */}
+          {/* <section className={classes.spaceTopShort} id="address">
             <MapAddress />
-          </section>
+          </section> */}
         </main>
         <Hidden mdDown>
           <PageNav />
