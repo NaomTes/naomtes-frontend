@@ -1,0 +1,18 @@
+const NextI18Next = require('next-i18next').default;
+
+module.exports = new NextI18Next({
+  defaultLanguage: 'en',
+  ns: ['common', 'agency-landing'],
+  otherLanguages: ['de', 'ar', 'id', 'zh', 'pt'],
+  fallbackLng: 'en',
+  initImmediate: false,
+  localePath: 'public/locales',
+  localeSubpaths: {
+    en: 'en',
+    ar: 'ar',
+    de: 'de',
+    id: 'id',
+    pt: 'pt',
+    zh: 'zh',
+  },
+});
