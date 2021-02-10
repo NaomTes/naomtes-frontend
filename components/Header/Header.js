@@ -13,7 +13,7 @@ import Scrollspy from 'react-scrollspy';
 import Settings from './Settings';
 import { withTranslation } from '~/i18n';
 import MobileMenu from './MobileMenu';
-import logo from '~/public/images/agency-logo.svg';
+import logo from '~/public/images/logo-agency.png';
 import brand from '~/public/text/brand';
 import routeLink from '~/public/text/link';
 import '~/vendors/hamburger-menu.css';

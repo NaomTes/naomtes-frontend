@@ -5,7 +5,7 @@ module.exports = {
     prefix: 'luxiren',
     footerText: 'VC Connector - All Rights Reserved 2021',
     logoText: 'VC Connector',
-    projectName: 'Investors X Startups',
+    projectName: 'VC Connector',
     url: '#',
     img: '/static/images/agency-logo.png',
     notifMsg: 'Donec sit amet nulla sed arcu pulvinar ultricies commodo id ligula.'

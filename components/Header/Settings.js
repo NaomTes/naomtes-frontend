@@ -121,7 +121,7 @@ function Settings(props) {
             </Typography>
           </ListItem>
         </List>
-        <Divider />
+        {/* <Divider />
         <List
           component="nav"
           className={clsx(classes.titleMenu, classes.langMenu)}
@@ -138,7 +138,8 @@ function Settings(props) {
               role={undefined}
               dense
               button
-              onClick={() => handleChangeLang(val)}
+              onClick={() => { }}
+            // onClick={() => handleChangeLang(val)}
             >
               <ListItemIcon>
                 <i className={val} />
@@ -151,7 +152,7 @@ function Settings(props) {
               )}
             </ListItem>
           ))}
-        </List>
+        </List> */}
       </Popover>
     </div>
   );

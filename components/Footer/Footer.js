@@ -18,7 +18,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Link from '@material-ui/core/Link';
 import IconButton from '@material-ui/core/IconButton';
 import { i18n, withTranslation } from '~/i18n';
-import logo from '~/public/images/agency-logo.svg';
+import logo from '~/public/images/logo-agency.png';
 import brand from '~/public/text/brand';
 import { useTextAlign } from '~/theme/common';
 import useStyles from './footer-style';
@@ -186,11 +186,6 @@ function Footer(props) {
             input={<OutlinedInput labelWidth={200} name="lang" id="outlined-lang-simple" />}
           >
             <MenuItem value="en">English</MenuItem>
-            <MenuItem value="de">Deutsch</MenuItem>
-            <MenuItem value="ar">العربيّة</MenuItem>
-            <MenuItem value="id">Bahasa Indonesia</MenuItem>
-            <MenuItem value="pt">Português</MenuItem>
-            <MenuItem value="zh">简体中文</MenuItem>
           </Select>
         </Grid>
       </Grid>
@@ -211,7 +206,7 @@ Footer.propTypes = {
 };
 
 Footer.defaultProps = {
-  toggleDir: () => {},
+  toggleDir: () => { },
 };
 
 export default withTranslation(['agency-landing'])(Footer);
