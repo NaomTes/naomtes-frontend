@@ -118,9 +118,9 @@ function Landing(props) {
         <section className={classes.spaceTopShort}>
           <Footer toggleDir={onToggleDir} />
         </section>
-        <Hidden mdDown>
+        {/* <Hidden mdDown>
           <Notification />
-        </Hidden>
+        </Hidden> */}
       </div>
     </React.Fragment>
   );

@@ -1,12 +1,12 @@
 module.exports = {
   agency: {
     name: 'VC Connector',
-    desc: 'Luxiren Agency - React Single Landing Page Template',
+    desc: 'Brining Investors and Startups under same roof',
     prefix: 'luxiren',
-    footerText: 'Luxiren Agency - All Rights Reserved 2020',
-    logoText: 'Luxiren Agency',
-    projectName: 'Agency Theme',
-    url: 'luxireact.ux-maestro.com/agency',
+    footerText: 'VC Connector - All Rights Reserved 2021',
+    logoText: 'VC Connector',
+    projectName: 'Investors X Startups',
+    url: '#',
     img: '/static/images/agency-logo.png',
     notifMsg: 'Donec sit amet nulla sed arcu pulvinar ultricies commodo id ligula.'
   }
