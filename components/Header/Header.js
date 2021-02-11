@@ -97,14 +97,14 @@ function Header(props) {
               )}
               <div className={classes.logo}>
                 {invert ? (
-                  <Link href={routeLink.agency.home}>
+                  <Link href='/'>
                     <a>
                       <img src={logo} alt="logo" />
                       {brand.agency.name}
                     </a>
                   </Link>
                 ) : (
-                    <AnchorLink href="#home">
+                    <AnchorLink href='/'>
                       <img src={logo} alt="logo" />
                       {brand.agency.name}
                     </AnchorLink>
@@ -133,12 +133,12 @@ function Header(props) {
                     </li>
                   ))}
                   <li>
-                    <Button href={routeLink.agency.contact}>
+                    <Button href={routeLink.agency.investor}>
                       Investors
                     </Button>
                   </li>
                   <li>
-                    <Button href={routeLink.agency.contact}>
+                    <Button href={routeLink.agency.startup}>
                       Startups
                     </Button>
                   </li>
