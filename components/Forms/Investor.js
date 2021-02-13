@@ -400,6 +400,13 @@ function Contact(props) {
     ]
   })
 
+  const [query, setQuery] = useState({
+    investment_stages_rating: 0,
+    investment_industry_rating: 0,
+    emerging_technologies_rating: 0,
+    investment_rates: 0
+  })
+
   const [values, setValues] = useState({
     first_name: '',
     last_name: '',
@@ -442,6 +449,7 @@ function Contact(props) {
     setNotif(false);
   };
 
+  console.log(query)
   const handleSelectChange = name => item => {
     setValues({ ...values, [name]: item.value });
   }
@@ -464,7 +472,9 @@ function Contact(props) {
     setValues({ ...values, [name]: filtered_array.map(item => item.value) })
   }
 
-  console.log(values)
+  let handleRatings = (newRating, name) => {
+    setQuery({ ...query, [name]: newRating })
+  }
 
   return (
     <div className={classes.formWrap}>
@@ -611,7 +621,7 @@ function Contact(props) {
                 />
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid item xs={6}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
                   What stage would you like to invest in? Select ALL that apply.
                 </span>
@@ -635,6 +645,19 @@ function Contact(props) {
                   /></div>
                 )
                 }
+              </Grid>
+
+              <Grid item xs={6}>
+                <div style={{ paddingTop: '15px' }}>
+                  <StarRatings
+                    rating={query.investment_stages_rating}
+                    starRatedColor="orange"
+                    changeRating={handleRatings}
+                    numberOfStars={5}
+                    name='investment_stages_rating'
+                    starDimension={"30px"}
+                  />
+                </div>
               </Grid>
 
               <Grid item xs={12}>
@@ -663,7 +686,7 @@ function Contact(props) {
                 }
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid item xs={6}>
                 <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block' }}>
                   How much are you looking to invest in a given deal?
                 </span>
@@ -675,7 +698,20 @@ function Contact(props) {
                 </RadioGroup>
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid item xs={6}>
+                <div style={{ paddingTop: '5px' }}>
+                  <StarRatings
+                    rating={query.investment_rates}
+                    starRatedColor="orange"
+                    changeRating={handleRatings}
+                    numberOfStars={5}
+                    name='investment_rates'
+                    starDimension={"30px"}
+                  />
+                </div>
+              </Grid>
+
+              <Grid item xs={6}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
                   Which category would you be interested to invest in? Select ALL that applies.
                 </span>
@@ -699,6 +735,19 @@ function Contact(props) {
                   /></div>
                 )
                 }
+              </Grid>
+
+              <Grid item xs={6}>
+                <div style={{ paddingTop: '15px' }}>
+                  <StarRatings
+                    rating={query.investment_industry_rating}
+                    starRatedColor="orange"
+                    changeRating={handleRatings}
+                    numberOfStars={5}
+                    name='investment_industry_rating'
+                    starDimension={"30px"}
+                  />
+                </div>
               </Grid>
 
               <Grid item xs={12}>
@@ -727,7 +776,7 @@ function Contact(props) {
                 }
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid item xs={6}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
                   Which emerging technology trend are you most interested in? Select ALL that applies.
                 </span>
@@ -751,6 +800,19 @@ function Contact(props) {
                   /></div>
                 )
                 }
+              </Grid>
+
+              <Grid item xs={6}>
+                <div style={{ paddingTop: '15px' }}>
+                  <StarRatings
+                    rating={query.emerging_technologies_rating}
+                    starRatedColor="orange"
+                    changeRating={handleRatings}
+                    numberOfStars={5}
+                    name='emerging_technologies_rating'
+                    starDimension={"30px"}
+                  />
+                </div>
               </Grid>
 
               <Grid item xs={12}>
