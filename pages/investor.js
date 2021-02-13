@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import Head from 'next/head';
 import brand from '~/public/text/brand';
-import ContactFrm from '../components/Forms/Contact';
+import InvestorForm from '../components/Forms/Investor';
 import Decoration from '../components/Forms/Decoration';
 import { withTranslation } from '../i18n';
 
@@ -16,7 +16,7 @@ function Investor() {
       </Head>
       <div>
         <Decoration />
-        <ContactFrm />
+        <InvestorForm />
       </div>
     </Fragment>
   );

@@ -13,7 +13,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import routeLink from '~/public/text/link';
 import { useText } from '~/theme/common';
-import logo from '~public/images/agency-logo.svg';
+import logo from '~public/images/logo-agency.png';
 import { withTranslation } from '~/i18n';
 import Checkbox from './Checkbox';
 import useStyles from './form-style';
