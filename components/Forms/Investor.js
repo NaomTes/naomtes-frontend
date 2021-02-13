@@ -345,6 +345,58 @@ function Contact(props) {
       { id: 2, value: 'seed_funding', checked: false, label: 'Seed Funding' },
       { id: 3, value: 'series', checked: false, label: 'Series A/B/C' },
       { id: 4, value: 'late_stage', checked: false, label: 'Late stage' }
+    ],
+    last_investment_stages: [
+      { id: 1, value: 'pre_seeding_investing', checked: false, label: 'Pre-seed Investing' },
+      { id: 2, value: 'seed_funding', checked: false, label: 'Seed Funding' },
+      { id: 3, value: 'series', checked: false, label: 'Series A/B/C' },
+      { id: 4, value: 'late_stage', checked: false, label: 'Late stage' }
+    ],
+    investment_category: [
+      { id: 1, value: 'banking', checked: false, label: 'Banking' },
+      { id: 2, value: 'telecom', checked: false, label: 'Telecom' },
+      { id: 3, value: 'pharma', checked: false, label: 'Pharma' },
+      { id: 4, value: 'oil_and_gas', checked: false, label: 'Oil and Gas' },
+      { id: 5, value: 'interactive_media', checked: false, label: 'Interactive media' },
+      { id: 6, value: 'automotive', checked: false, label: 'Automotive' },
+      { id: 7, value: 'consumer_electronics', checked: false, label: 'Consumer electronics' },
+      { id: 8, value: 'e_commerce', checked: false, label: 'e-commerce' },
+      { id: 9, value: 'others', checked: false, label: 'Others' },
+    ],
+    investment_industry: [
+      { id: 1, value: 'banking', checked: false, label: 'Banking' },
+      { id: 2, value: 'telecom', checked: false, label: 'Telecom' },
+      { id: 3, value: 'pharma', checked: false, label: 'Pharma' },
+      { id: 4, value: 'oil_and_gas', checked: false, label: 'Oil and Gas' },
+      { id: 5, value: 'interactive_media', checked: false, label: 'Interactive media' },
+      { id: 6, value: 'automotive', checked: false, label: 'Automotive' },
+      { id: 7, value: 'consumer_electronics', checked: false, label: 'Consumer electronics' },
+      { id: 8, value: 'e_commerce', checked: false, label: 'e-commerce' },
+      { id: 9, value: 'others', checked: false, label: 'Others' },
+    ],
+    emerging_technologies: [
+      { id: 1, value: 'ai', checked: false, label: 'Machine Learning & AI' },
+      { id: 2, value: 'fintech', checked: false, label: 'Fintech' },
+      { id: 3, value: 'iot', checked: false, label: 'Internet of Things (IoT)' },
+      { id: 4, value: '5G', checked: false, label: '5G Solutions' },
+      { id: 5, value: 'bio_tech', checked: false, label: 'Biotech & Precision Genomics' },
+      { id: 6, value: 'cloud_computing', checked: false, label: 'Cloud Computing' },
+      { id: 7, value: 'cyber_security', checked: false, label: 'Cyber security' },
+      { id: 8, value: 'enterprise_technology', checked: false, label: 'Enterprise Technology' },
+      { id: 9, value: 'consumer_technology', checked: false, label: 'Consumer Technology' },
+      { id: 10, value: 'others', checked: false, label: 'Others' },
+    ],
+    previous_emerging_technologies: [
+      { id: 1, value: 'ai', checked: false, label: 'Machine Learning & AI' },
+      { id: 2, value: 'fintech', checked: false, label: 'Fintech' },
+      { id: 3, value: 'iot', checked: false, label: 'Internet of Things (IoT)' },
+      { id: 4, value: '5G', checked: false, label: '5G Solutions' },
+      { id: 5, value: 'bio_tech', checked: false, label: 'Biotech & Precision Genomics' },
+      { id: 6, value: 'cloud_computing', checked: false, label: 'Cloud Computing' },
+      { id: 7, value: 'cyber_security', checked: false, label: 'Cyber security' },
+      { id: 8, value: 'enterprise_technology', checked: false, label: 'Enterprise Technology' },
+      { id: 9, value: 'consumer_technology', checked: false, label: 'Consumer Technology' },
+      { id: 10, value: 'others', checked: false, label: 'Others' },
     ]
   })
 
@@ -359,8 +411,15 @@ function Contact(props) {
     syndicate_group: '',
     group_name: '',
     organization_name: '',
-    investment_stages: []
-
+    investment_stages: [],
+    last_investment_stages: [],
+    investment_rates: '',
+    investment_category: [],
+    investment_industry: [],
+    emerging_technologies: [],
+    previous_emerging_technologies: [],
+    founder_type: '',
+    about_us: ''
   });
 
   useEffect(() => {
@@ -577,8 +636,168 @@ function Contact(props) {
                 )
                 }
               </Grid>
+
+              <Grid item xs={12}>
+                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
+                  What was the last equity investment round you invested?
+                </span>
+
+                {all.last_investment_stages.map(stage =>
+                  <div><FormControlLabel
+                    id={stage.id}
+                    control={(
+                      <Checkbox
+                        checked={stage.checked}
+                        value={stage.value}
+                        onChange={() => handleCheckBoxesSelect("last_investment_stages", all.last_investment_stages, stage.id)}
+                        color="primary"
+                      />
+                    )}
+                    label={(
+                      <span>
+                        {stage.label}
+                      </span>
+                    )}
+                  /></div>
+                )
+                }
+              </Grid>
+
+              <Grid item xs={12}>
+                <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block' }}>
+                  How much are you looking to invest in a given deal?
+                </span>
+                <RadioGroup name="investment_rates" selectedValue={values.investment_rates} onChange={handleRadioChange("investment_rates")}>
+                  <div style={{ marginTop: '5px' }}><Radio value="25K" /> $25,000-$100,000</div>
+                  <div style={{ marginTop: '10px' }}><Radio value="100K" /> $100,000-$500,000</div>
+                  <div style={{ marginTop: '10px' }}><Radio value="500K" /> $500,000-$1,000,000</div>
+                  <div style={{ marginTop: '10px' }}><Radio value="1M" /> Above $1M</div>
+                </RadioGroup>
+              </Grid>
+
+              <Grid item xs={12}>
+                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
+                  Which category would you be interested to invest in? Select ALL that applies.
+                </span>
+
+                {all.investment_category.map(category =>
+                  <div><FormControlLabel
+                    id={category.id}
+                    control={(
+                      <Checkbox
+                        checked={category.checked}
+                        value={category.value}
+                        onChange={() => handleCheckBoxesSelect("investment_category", all.investment_category, category.id)}
+                        color="primary"
+                      />
+                    )}
+                    label={(
+                      <span>
+                        {category.label}
+                      </span>
+                    )}
+                  /></div>
+                )
+                }
+              </Grid>
+
+              <Grid item xs={12}>
+                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
+                  Previous investment Industry? Select ALL that applies.
+                </span>
+
+                {all.investment_industry.map(industry =>
+                  <div><FormControlLabel
+                    id={industry.id}
+                    control={(
+                      <Checkbox
+                        checked={industry.checked}
+                        value={industry.value}
+                        onChange={() => handleCheckBoxesSelect("investment_industry", all.investment_industry, industry.id)}
+                        color="primary"
+                      />
+                    )}
+                    label={(
+                      <span>
+                        {industry.label}
+                      </span>
+                    )}
+                  /></div>
+                )
+                }
+              </Grid>
+
+              <Grid item xs={12}>
+                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
+                  Which emerging technology trend are you most interested in? Select ALL that applies.
+                </span>
+
+                {all.emerging_technologies.map(technology =>
+                  <div><FormControlLabel
+                    id={technology.id}
+                    control={(
+                      <Checkbox
+                        checked={technology.checked}
+                        value={technology.value}
+                        onChange={() => handleCheckBoxesSelect("emerging_technologies", all.emerging_technologies, technology.id)}
+                        color="primary"
+                      />
+                    )}
+                    label={(
+                      <span>
+                        {technology.label}
+                      </span>
+                    )}
+                  /></div>
+                )
+                }
+              </Grid>
+
+              <Grid item xs={12}>
+                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
+                  Have you previously invested in the following emerging technologies? Select ALL that applies.
+                </span>
+
+                {all.previous_emerging_technologies.map(technology =>
+                  <div><FormControlLabel
+                    id={technology.id}
+                    control={(
+                      <Checkbox
+                        checked={technology.checked}
+                        value={technology.value}
+                        onChange={() => handleCheckBoxesSelect("previous_emerging_technologies", all.previous_emerging_technologies, technology.id)}
+                        color="primary"
+                      />
+                    )}
+                    label={(
+                      <span>
+                        {technology.label}
+                      </span>
+                    )}
+                  /></div>
+                )
+                }
+              </Grid>
+              <Grid item xs={12}>
+                <TextValidator
+                  className={classes.input}
+                  label={"What type of founders are you looking for?"}
+                  onChange={handleChange('founder_type')}
+                  name="founder_type"
+                  value={values.founder_type}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextValidator
+                  className={classes.input}
+                  label={"Where did you hear about us?"}
+                  onChange={handleChange('about_us')}
+                  name="about_us"
+                  value={values.about_us}
+                />
+              </Grid>
             </Grid>
-            <div className={classes.btnArea}>
+            <div style={{ marginTop: '50px' }} className={classes.btnArea}>
               <Button style={{ margin: 'auto' }} variant="outlined" type="submit" color="primary" size="large">
                 Save Record
                 {/* <SendIcon className={classes.rightIcon} /> */}
