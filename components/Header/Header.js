@@ -97,17 +97,15 @@ function Header(props) {
               )}
               <div className={classes.logo}>
                 {invert ? (
-                  <Link href='/'>
-                    <a>
+                  <a>
+                    <img src={logo} alt="logo" />
+                    {brand.agency.name}
+                  </a>
+                ) : (
+                    <a href="/">
                       <img src={logo} alt="logo" />
                       {brand.agency.name}
                     </a>
-                  </Link>
-                ) : (
-                    <AnchorLink href='/'>
-                      <img src={logo} alt="logo" />
-                      {brand.agency.name}
-                    </AnchorLink>
                   )}
               </div>
             </nav>
