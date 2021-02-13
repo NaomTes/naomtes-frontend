@@ -339,6 +339,15 @@ function Contact(props) {
   const { t } = props;
   const classes = useStyles();
   const text = useText();
+  const [all, setAllValue] = useState({
+    investment_stages: [
+      { id: 1, value: 'pre_seeding_investing', checked: false, label: 'Pre-seed Investing' },
+      { id: 2, value: 'seed_funding', checked: false, label: 'Seed Funding' },
+      { id: 3, value: 'series', checked: false, label: 'Series A/B/C' },
+      { id: 4, value: 'late_stage', checked: false, label: 'Late stage' }
+    ]
+  })
+
   const [values, setValues] = useState({
     first_name: '',
     last_name: '',
@@ -350,12 +359,7 @@ function Contact(props) {
     syndicate_group: '',
     group_name: '',
     organization_name: '',
-    investment_stages: [
-      { id: 1, value: 'pre_seeding_investing', checked: false, label: 'Pre-seed Investing' },
-      { id: 2, value: 'seed_funding', checked: false, label: 'Seed Funding' },
-      { id: 3, value: 'series', checked: false, label: 'Series A/B/C' },
-      { id: 4, value: 'late_stage', checked: false, label: 'Late stage' }
-    ]
+    investment_stages: []
 
   });
 
@@ -387,10 +391,21 @@ function Contact(props) {
     setValues({ ...values, [name]: item });
   }
 
-  let handleCheckBoxesSelect = (name, item_id) => {
-    console.log(name)
-    console.log(item_id)
+  let handleCheckBoxesSelect = (name, payload, item_id) => {
+    let new_array = payload.map(item => {
+      if (item_id == item.id) {
+        item.checked = !item.checked
+      }
+      return item
+    })
+
+    setAllValue({ ...all, [name]: new_array })
+
+    let filtered_array = new_array.filter(item => item.checked == true)
+    setValues({ ...values, [name]: filtered_array.map(item => item.value) })
   }
+
+  console.log(values)
 
   return (
     <div className={classes.formWrap}>
@@ -542,14 +557,14 @@ function Contact(props) {
                   What stage would you like to invest in? Select ALL that apply.
                 </span>
 
-                {values.investment_stages.map(stage =>
+                {all.investment_stages.map(stage =>
                   <div><FormControlLabel
                     id={stage.id}
                     control={(
                       <Checkbox
                         checked={stage.checked}
                         value={stage.value}
-                        onChange={() => handleCheckBoxesSelect("investment_stages", stage.id)}
+                        onChange={() => handleCheckBoxesSelect("investment_stages", all.investment_stages, stage.id)}
                         color="primary"
                       />
                     )}
