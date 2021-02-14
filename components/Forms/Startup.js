@@ -548,8 +548,8 @@ function Contact(props) {
       .then(({ results }) => {
         setModal(true)
         console.log(results)
-        let limited_response = results.filter((_, index) => index < 5)
-        setResponse(limited_response)
+        // let limited_response = results.filter((_, index) => index < 5)
+        setResponse(results)
         setNotif(true);
         setNotificationMsg("Results are processed!")
 
@@ -570,7 +570,7 @@ function Contact(props) {
         isOpen={modal}
         style={customStyles}
       >
-        <h2 style={{ color: 'grey', marginBottom: '40px' }}>Investors (TOP 5)</h2>
+        <h2 style={{ color: 'grey', marginBottom: '40px' }}>Investors</h2>
 
         {response?.length == 0 ?
           <h3 style={{ marginTop: '40px' }}>No Investors are added in the system</h3>
@@ -593,7 +593,7 @@ function Contact(props) {
 
           setModal(false)
         }} variant="outlined" type="submit" color="primary" size="large">
-          Close Modal
+          Close
         </Button>
       </Modal>
 

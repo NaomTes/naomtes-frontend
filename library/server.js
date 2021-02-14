@@ -1,2 +1,2 @@
 // api link here
-export const server = "http://localhost:3000";
+export const server = "https://activity-management-0.herokuapp.com";
