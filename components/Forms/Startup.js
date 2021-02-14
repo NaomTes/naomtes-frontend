@@ -20,6 +20,21 @@ import StarRatings from 'react-star-ratings';
 import useStyles from './form-style';
 import Select from 'react-select';
 import { RadioGroup, Radio } from 'react-radio-group'
+import { ProgressBar } from 'react-bootstrap'
+
+import Modal from 'react-modal';
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    width: '60vw',
+    height: '80vh',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)'
+  }
+};
 
 import { createStartup, investorSuggestion } from './api'
 
@@ -335,10 +350,11 @@ const countries = [
   { value: "zimbabwe", label: "Zimbabwe" }
 ];
 
-
+import Progress from 'react-progressbar'
 
 function Contact(props) {
   const { t } = props;
+  const [response, setResponse] = useState(null)
   const classes = useStyles();
   const text = useText();
   const defaultValues = {
@@ -413,6 +429,7 @@ function Contact(props) {
   }
 
   const [query, setQuery] = useState(defaultQuery)
+  const [modal, setModal] = useState(false)
   const [notificationMsg, setNotificationMsg] = useState('')
 
   const defaultObject = {
@@ -528,8 +545,11 @@ function Contact(props) {
       startup: values,
       ratings: query
     })
-      .then(response => {
-        console.log(response)
+      .then(({ results }) => {
+        setModal(true)
+        console.log(results)
+        let limited_response = results.filter((_, index) => index < 5)
+        setResponse(limited_response)
         setNotif(true);
         setNotificationMsg("Results are processed!")
 
@@ -546,6 +566,37 @@ function Contact(props) {
 
   return (
     <div className={classes.formWrap}>
+      <Modal
+        isOpen={modal}
+        style={customStyles}
+      >
+        <h2 style={{ color: 'grey', marginBottom: '40px' }}>Investors (TOP 5)</h2>
+
+        {response?.length == 0 ?
+          <h3 style={{ marginTop: '40px' }}>No Investors are added in the system</h3>
+          : null
+        }
+
+        {
+          response?.map((item, index) =>
+            <div key={index}>
+              <h3 style={{ marginTop: '20px', marginBottom: '5px' }}>{`${item.investor_name} (${item.match_score}%)`}</h3>
+              <div style={{ width: '100%', marginBottom: '30px' }}>
+                <Progress completed={item.match_score} />
+              </div>
+            </div>
+          )
+        }
+
+        <Button style={{ margin: 'auto', display: 'block', width: '80%' }} onClick={e => {
+          e.preventDefault();
+
+          setModal(false)
+        }} variant="outlined" type="submit" color="primary" size="large">
+          Close Modal
+        </Button>
+      </Modal>
+
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         key="top right"
@@ -982,7 +1033,7 @@ function Contact(props) {
           </ValidatorForm>
         </div>
       </Container>
-    </div>
+    </div >
   );
 }
 

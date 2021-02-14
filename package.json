@@ -52,6 +52,8 @@
 		"react-image-lightbox": "^5.1.1",
 		"react-ionicons": "^3.0.1",
 		"react-material-ui-form-validator": "2.0.9",
+		"react-modal": "^3.12.1",
+		"react-progressbar": "^15.4.1",
 		"react-radio-group": "^3.0.3",
 		"react-scroll-parallax": "^2.1.2",
 		"react-scrollspy": "^3.4.2",

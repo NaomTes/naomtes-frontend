@@ -21,8 +21,23 @@ import useStyles from './form-style';
 import Select from 'react-select';
 import { RadioGroup, Radio } from 'react-radio-group'
 import { Spinner } from 'react-bootstrap'
+import Progress from 'react-progressbar'
 
 import { createInvestor, startupSuggestion } from './api'
+import Modal from 'react-modal';
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    width: '60vw',
+    height: '80vh',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)'
+  }
+};
+
 
 var states = [
   { label: 'ALABAMA', value: 'AL' },
@@ -403,6 +418,9 @@ function Contact(props) {
     ]
   }
   const [all, setAllValue] = useState(defaultValues)
+  const [modal, setModal] = useState(false)
+  const [response, setResponse] = useState(null)
+
 
   const defaultQuery = {
     investment_stages: 0,
@@ -493,7 +511,10 @@ function Contact(props) {
       investor: values,
       ratings: query
     })
-      .then(response => {
+      .then(({ results }) => {
+        setModal(true)
+        let limited_response = results.filter((_, index) => index < 5)
+        setResponse(limited_response)
         setNotif(true);
         console.log(response)
         setNotificationMsg("Results are processed!")
@@ -541,6 +562,36 @@ function Contact(props) {
 
   return (
     <div className={classes.formWrap}>
+      <Modal
+        isOpen={modal}
+        style={customStyles}
+      >
+        <h2 style={{ color: 'grey', marginBottom: '40px' }}>Startups (TOP 5)</h2>
+
+        {response?.length == 0 ?
+          <h3 style={{ marginTop: '40px' }}>No Startups are added in the system</h3>
+          : null
+        }
+        {
+          response?.map((item, index) =>
+            <div key={index}>
+              <h3 style={{ marginTop: '20px', marginBottom: '5px' }}>{`${item.company_name} (${item.match_score}%)`}</h3>
+              <div style={{ width: '100%', marginBottom: '30px' }}>
+                <Progress completed={item.match_score} />
+              </div>
+            </div>
+          )
+        }
+
+        <Button style={{ margin: 'auto', display: 'block', width: '80%' }} onClick={e => {
+          e.preventDefault();
+
+          setModal(false)
+        }} variant="outlined" type="submit" color="primary" size="large">
+          Close Modal
+        </Button>
+      </Modal>
+
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         key="top right"
