@@ -3,7 +3,7 @@ import axios from 'axios';
 import { server } from './server';
 
 const service = axios.create({
-    baseURL: new URL('/api', server).href,
+    baseURL: new URL('/api/v1/investor', server).href,
     timeout: 60000,
     headers: {
         'Content-Type': 'application/json',

@@ -1,2 +1,2 @@
 // api link here
-export const server = "";
+export const server = "http://localhost:3000";

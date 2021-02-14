@@ -21,6 +21,8 @@ import useStyles from './form-style';
 import Select from 'react-select';
 import { RadioGroup, Radio } from 'react-radio-group'
 
+import { createInvestor } from './api'
+
 var states = [
   { label: 'ALABAMA', value: 'AL' },
   { label: 'ALASKA', value: 'AK' },
@@ -441,15 +443,26 @@ function Contact(props) {
     setValues({ ...values, [name]: event.target.value });
   };
 
-  const handleSubmit = () => {
-    setNotif(true);
+  const handleSubmit = e => {
+    // setNotif(true);
+    e.preventDefault()
+
+    createInvestor({ investors: values })
+      .then(response => {
+        console.log("response -> ", response)
+      })
+      .catch((errors) => {
+
+      })
+      .finally(() => {
+
+      });
   };
 
   const handleClose = () => {
     setNotif(false);
   };
 
-  console.log(query)
   const handleSelectChange = name => item => {
     setValues({ ...values, [name]: item.value });
   }
@@ -577,7 +590,7 @@ function Contact(props) {
                 </span>
                 <Select
                   options={countries}
-                  value={values.country}
+                  value={countries.find(item => item.value == values.country)}
                   onChange={handleSelectChange("country")}
                 />
               </Grid>
@@ -587,7 +600,7 @@ function Contact(props) {
                 </span>
                 <Select
                   options={states}
-                  value={values.state}
+                  value={states.find(item => item.value == values.state)}
                   onChange={handleSelectChange("state")}
                 />
               </Grid>
