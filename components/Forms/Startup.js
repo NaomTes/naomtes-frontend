@@ -435,7 +435,7 @@ function Contact(props) {
     investment_industry: [],
     emerging_technologies: [],
     previous_emerging_technologies: [],
-    investory_type: '',
+    investor_type: '',
     value_preposition: '',
     competitors: '',
     additional_comments: '',
