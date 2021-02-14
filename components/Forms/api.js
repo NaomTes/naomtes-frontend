@@ -15,3 +15,20 @@ export function createStartup(data) {
     data,
   });
 }
+
+export function investorSuggestion(data) {
+  console.log(data)
+  return request({
+    url: 'investors/process_results',
+    method: 'post',
+    data,
+  })
+}
+
+export function startupSuggestion(data) {
+  return request({
+    url: 'startups/process_results',
+    method: 'post',
+    data,
+  })
+}

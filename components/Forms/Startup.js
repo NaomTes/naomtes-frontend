@@ -21,7 +21,7 @@ import useStyles from './form-style';
 import Select from 'react-select';
 import { RadioGroup, Radio } from 'react-radio-group'
 
-import { createStartup } from './api'
+import { createStartup, investorSuggestion } from './api'
 
 var states = [
   { label: 'ALABAMA', value: 'AL' },
@@ -510,7 +510,40 @@ function Contact(props) {
   let handleRatings = (newRating, name) => {
     setQuery({ ...query, [name]: newRating })
   }
-  console.log("values -> ", values)
+
+  let handleInvestorSuggestion = e => {
+    e.preventDefault()
+    setLoading(true)
+
+    let processedQuery = true;
+    Object.values(query).forEach(item => {
+      if (item == 0) processedQuery = false
+    })
+    if (!processedQuery) {
+      setNotif(true);
+      setLoading(false)
+      setNotificationMsg("Please do proper weightages to all questions!")
+      return
+    }
+    investorSuggestion({
+      startup: values,
+      ratings: query
+    })
+      .then(response => {
+        setNotif(true);
+        setNotificationMsg("Results are processed!")
+
+      })
+      .catch((errors) => {
+        setNotif(true);
+        setNotificationMsg("Something Went Wrong!")
+      })
+      .finally(() => {
+        setLoading(false)
+      });
+
+  }
+
   return (
     <div className={classes.formWrap}>
       <Snackbar
@@ -941,9 +974,7 @@ function Contact(props) {
                 Save Record
               </Button>
 
-              <Button disabled={loading} style={{ margin: 'auto' }} onClick={e => {
-                e.preventDefault()
-              }} variant="outlined" type="submit" color="primary" size="large">
+              <Button disabled={loading} style={{ margin: 'auto' }} onClick={handleInvestorSuggestion} variant="outlined" type="submit" color="primary" size="large">
                 Suggest Investors
                 {/* <SendIcon className={classes.rightIcon} /> */}
               </Button>

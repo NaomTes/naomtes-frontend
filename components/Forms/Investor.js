@@ -22,7 +22,7 @@ import Select from 'react-select';
 import { RadioGroup, Radio } from 'react-radio-group'
 import { Spinner } from 'react-bootstrap'
 
-import { createInvestor } from './api'
+import { createInvestor, startupSuggestion } from './api'
 
 var states = [
   { label: 'ALABAMA', value: 'AL' },
@@ -476,6 +476,39 @@ function Contact(props) {
       });
   };
 
+  let handleStartupSuggestion = e => {
+    e.preventDefault()
+    setLoading(true)
+
+    let processedQuery = true;
+    Object.values(query).forEach(item => {
+      if (item == 0) processedQuery = false
+    })
+    if (!processedQuery) {
+      setNotif(true);
+      setLoading(false)
+      setNotificationMsg("Please do proper weightages to all questions!")
+      return
+    }
+    startupSuggestion({
+      investor: values,
+      ratings: query
+    })
+      .then(response => {
+        setNotif(true);
+        setNotificationMsg("Results are processed!")
+
+      })
+      .catch((errors) => {
+        setNotif(true);
+        setNotificationMsg("Something Went Wrong!")
+      })
+      .finally(() => {
+        setLoading(false)
+      });
+
+  }
+
   const handleClose = () => {
     setNotif(false);
   };
@@ -894,9 +927,7 @@ function Contact(props) {
                 Save Record
               </Button>
 
-              <Button disabled={loading} style={{ margin: 'auto' }} onClick={e => {
-                e.preventDefault()
-              }} variant="outlined" type="submit" color="primary" size="large">
+              <Button disabled={loading} style={{ margin: 'auto' }} onClick={handleStartupSuggestion} variant="outlined" type="submit" color="primary" size="large">
                 Suggest Startups
                 {/* <SendIcon className={classes.rightIcon} /> */}
               </Button>
