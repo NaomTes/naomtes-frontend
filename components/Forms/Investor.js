@@ -20,6 +20,7 @@ import StarRatings from 'react-star-ratings';
 import useStyles from './form-style';
 import Select from 'react-select';
 import { RadioGroup, Radio } from 'react-radio-group'
+import { Spinner } from 'react-bootstrap'
 
 import { createInvestor } from './api'
 
@@ -341,7 +342,7 @@ function Contact(props) {
   const { t } = props;
   const classes = useStyles();
   const text = useText();
-  const [all, setAllValue] = useState({
+  const defaultValues = {
     investment_stages: [
       { id: 1, value: 'pre_seeding_investing', checked: false, label: 'Pre-seed Investing' },
       { id: 2, value: 'seed_funding', checked: false, label: 'Seed Funding' },
@@ -400,16 +401,21 @@ function Contact(props) {
       { id: 9, value: 'consumer_technology', checked: false, label: 'Consumer Technology' },
       { id: 10, value: 'others', checked: false, label: 'Others' },
     ]
-  })
+  }
+  const [all, setAllValue] = useState(defaultValues)
 
-  const [query, setQuery] = useState({
+
+  const defaultQuery = {
     investment_stages_rating: 0,
     investment_industry_rating: 0,
     emerging_technologies_rating: 0,
     investment_rates: 0
-  })
+  }
 
-  const [values, setValues] = useState({
+  const [query, setQuery] = useState(defaultQuery)
+  const [notificationMsg, setNotificationMsg] = useState('')
+
+  const defaultObject = {
     first_name: '',
     last_name: '',
     email: '',
@@ -429,7 +435,11 @@ function Contact(props) {
     previous_emerging_technologies: [],
     founder_type: '',
     about_us: ''
-  });
+  }
+
+  const [values, setValues] = useState(defaultObject);
+
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     ValidatorForm.addValidationRule('isTruthy', value => value);
@@ -444,18 +454,25 @@ function Contact(props) {
   };
 
   const handleSubmit = e => {
-    // setNotif(true);
+    setLoading(true)
     e.preventDefault()
 
     createInvestor({ investors: values })
       .then(response => {
         console.log("response -> ", response)
+        setNotif(true);
+        setNotificationMsg("Record Inserted!")
+        setValues(defaultObject)
+        setAllValue(defaultValues)
+        setQuery(defaultQuery)
+
       })
       .catch((errors) => {
-
+        setNotif(true);
+        setNotificationMsg("Something Went Wrong!")
       })
       .finally(() => {
-
+        setLoading(false)
       });
   };
 
@@ -500,7 +517,7 @@ function Contact(props) {
         ContentProps={{
           'aria-describedby': 'message-id',
         }}
-        message={<span id="message-id">Message Sent</span>}
+        message={notificationMsg}
       />
       <Hidden mdUp>
         <div className={clsx(classes.logo, classes.logoHeader)}>
@@ -873,12 +890,11 @@ function Contact(props) {
               </Grid>
             </Grid>
             <div style={{ marginTop: '50px' }} className={classes.btnArea}>
-              <Button style={{ margin: 'auto' }} variant="outlined" type="submit" color="primary" size="large">
+              <Button disabled={loading} style={{ margin: 'auto' }} variant="outlined" type="submit" color="primary" size="large">
                 Save Record
-                {/* <SendIcon className={classes.rightIcon} /> */}
               </Button>
 
-              <Button style={{ margin: 'auto' }} onClick={e => {
+              <Button disabled={loading} style={{ margin: 'auto' }} onClick={e => {
                 e.preventDefault()
               }} variant="outlined" type="submit" color="primary" size="large">
                 Suggest Startups
