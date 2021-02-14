@@ -4,10 +4,12 @@ const withImages = require('next-images');
 module.exports = withImages(
   withCSS({
     exportTrailingSlash: true,
-    exportPathMap: function() {
+    exportPathMap: function () {
       return {
         '/': { page: '/' },
         '/contact': { page: '/contact' },
+        '/investor': { page: '/investor' },
+        '/startup': { page: '/startup' },
         '/blank-page': { page: '/blank-page' },
       };
     },
@@ -17,7 +19,7 @@ module.exports = withImages(
         : 'none',
     },
     webpack: (config, options) => {
-        cssModules: true,
+      cssModules: true,
         //        config.module.rules.push({
         //            enforce: 'pre',
         //            test: /\.js?$/,
@@ -28,9 +30,9 @@ module.exports = withImages(
         //            }
         //        });
         config.node = {
-          fs: 'empty' 
+          fs: 'empty'
         }
-        return config;
+      return config;
     }
   })
 );
