@@ -405,11 +405,10 @@ function Contact(props) {
   }
   const [all, setAllValue] = useState(defaultValues)
 
-
   const defaultQuery = {
-    investment_stages_rating: 0,
-    investment_industry_rating: 0,
-    emerging_technologies_rating: 0,
+    investment_stages: 0,
+    investment_category: 0,
+    emerging_technologies: 0,
     investment_rates: 0
   }
 
@@ -530,6 +529,7 @@ function Contact(props) {
       ratings: query
     })
       .then(response => {
+        console.log(response)
         setNotif(true);
         setNotificationMsg("Results are processed!")
 
@@ -720,11 +720,11 @@ function Contact(props) {
               <Grid item xs={6}>
                 <div style={{ paddingTop: '15px' }}>
                   <StarRatings
-                    rating={query.investment_stages_rating}
+                    rating={query.investment_stages}
                     starRatedColor="orange"
                     changeRating={handleRatings}
                     numberOfStars={5}
-                    name='investment_stages_rating'
+                    name='investment_stages'
                     starDimension={"30px"}
                   />
                 </div>
@@ -823,11 +823,11 @@ function Contact(props) {
               <Grid item xs={6}>
                 <div style={{ paddingTop: '15px' }}>
                   <StarRatings
-                    rating={query.investment_industry_rating}
+                    rating={query.investment_category}
                     starRatedColor="orange"
                     changeRating={handleRatings}
                     numberOfStars={5}
-                    name='investment_industry_rating'
+                    name='investment_category'
                     starDimension={"30px"}
                   />
                 </div>
@@ -888,11 +888,11 @@ function Contact(props) {
               <Grid item xs={6}>
                 <div style={{ paddingTop: '15px' }}>
                   <StarRatings
-                    rating={query.emerging_technologies_rating}
+                    rating={query.emerging_technologies}
                     starRatedColor="orange"
                     changeRating={handleRatings}
                     numberOfStars={5}
-                    name='emerging_technologies_rating'
+                    name='emerging_technologies'
                     starDimension={"30px"}
                   />
                 </div>
