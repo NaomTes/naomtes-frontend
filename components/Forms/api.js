@@ -7,3 +7,11 @@ export function createInvestor(data) {
     data,
   });
 }
+
+export function createStartup(data) {
+  return request({
+    url: 'startups/',
+    method: 'post',
+    data,
+  });
+}
