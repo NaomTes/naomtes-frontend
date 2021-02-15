@@ -112,9 +112,9 @@ function Landing(props) {
             <MapAddress />
           </section> */}
         </main>
-        <Hidden mdDown>
+        {/* <Hidden mdDown>
           <PageNav />
-        </Hidden>
+        </Hidden> */}
         <section className={classes.spaceTopShort}>
           <Footer toggleDir={onToggleDir} />
         </section>

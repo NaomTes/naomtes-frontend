@@ -28,7 +28,7 @@ function About(props) {
     <div className={classes.root}>
       <Container fixed>
         <Grid container spacing={6}>
-          <Grid item md={5} xs={12}>
+          <Grid style={{ marginTop: '150px' }} item md={5} xs={12}>
             <div>
               <TitleDeco text={t('common:agency-landing.about_title')} />
               {isDesktop && (
@@ -47,14 +47,20 @@ function About(props) {
             </div>
           </Grid>
           <Grid item md={7} xs={12}>
-            <Typography className={clsx(title.default, text.subtitle)} variant="h4">
-              {t('common:agency-landing.about_subtitle')}
+            <Typography style={{ height: '400px' }} className={clsx(title.default, text.subtitle)} variant="h4">
+              Our platform is a next generation global platform that connects investors with a diversified set of startups across industries , emerging technologies and minority groups. It is driven by data analytics and scientific research of past deal flow.
             </Typography>
-            <Counter />
-            <blockquote>
-              {t('common:agency-landing.about_quote')}
-            </blockquote>
           </Grid>
+
+          {/* <Grid item xs={12}>
+            <Typography style={{ height: '400px' }} className={clsx(title.default, text.subtitle)} variant="h4">
+              VC Connector platform was developed with a simple mission: eliminating barriers faced by women and minorities throughout the VC ecosystem.
+
+              VC Connector provides direct access to investors without the need to incur expensive travel cost associated with in-person meetings.
+
+              Register to our platform and let us pre-select VCs that would support and potentially invest in your startup ideas.
+            </Typography>
+          </Grid> */}
         </Grid>
       </Container>
     </div>

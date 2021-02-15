@@ -17,10 +17,11 @@ import logo from '~public/images/logo-agency.png';
 import { withTranslation } from '~/i18n';
 import Checkbox from './Checkbox';
 import StarRatings from 'react-star-ratings';
-import useStyles from './form-style';
+import useStyles from './form-style-pro';
 import Select from 'react-select';
 import { RadioGroup, Radio } from 'react-radio-group'
 import { Spinner } from 'react-bootstrap'
+import './style-pro.css'
 import Progress from 'react-progressbar'
 
 import { createInvestor, startupSuggestion } from './api'
@@ -30,8 +31,8 @@ const customStyles = {
     top: '50%',
     left: '50%',
     right: 'auto',
-    width: '60vw',
-    height: '80vh',
+    width: '90vw',
+    height: '95vh',
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)'
@@ -336,7 +337,7 @@ const countries = [
   { value: "ukraine", label: "Ukraine" },
   { value: "united_arab_emirates", label: "United Arab Emirates" },
   { value: "united_kingdom", label: "United Kingdom" },
-  { value: "united_states_of america", label: "United States of America" },
+  { value: "united_states_of_america", label: "United States of America" },
   { value: "uruguay", label: "Uruguay" },
   { value: "uzbekistan", label: "Uzbekistan" },
   { value: "vanuatu", label: "Vanuatu" },
@@ -451,7 +452,10 @@ function Contact(props) {
     emerging_technologies: [],
     previous_emerging_technologies: [],
     founder_type: '',
-    about_us: ''
+    about_us: '',
+
+
+    startup_selected: ''
   }
 
   const [values, setValues] = useState(defaultObject);
@@ -464,21 +468,54 @@ function Contact(props) {
 
   const [openNotif, setNotif] = useState(false);
 
-  const [check, setCheck] = useState(false);
+  const [showState, setShowState] = useState(false);
 
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value });
   };
 
+  let validationsFailed = () => {
+    if (values.country === '') {
+      setNotif(true);
+      setNotificationMsg("Please Select Country!")
+      return true
+    } else if (values.country === 'united_states_of_america') {
+      if (values.state === "") {
+        setNotif(true);
+        setNotificationMsg("Please Select State!")
+        return true
+      }
+    }
+
+    if (values.investment_stages.length == 0 || values.last_investment_stages.length == 0 || values.investment_category.length == 0 || values.investment_industry.length == 0 || values.emerging_technologies.length == 0 || values.previous_emerging_technologies.length == 0) {
+      setNotif(true);
+      setNotificationMsg("Please Select one or more options!")
+      return true
+    }
+
+    if (values.investment_rates == "") {
+      setNotif(true);
+      setNotificationMsg("Please Select one or more options!")
+      return true
+    }
+    return false;
+  }
+
   const handleSubmit = e => {
+    if (values.startup_selected == "") {
+      setNotif(true);
+      setNotificationMsg("Select one startup!")
+      return;
+    }
+
     setLoading(true)
-    e.preventDefault()
 
     createInvestor({ investors: values })
       .then(response => {
         console.log("response -> ", response)
         setNotif(true);
         setNotificationMsg("Record Inserted!")
+        setModal(false)
         setValues(defaultObject)
         setAllValue(defaultValues)
         setQuery(defaultQuery)
@@ -495,7 +532,9 @@ function Contact(props) {
 
   let handleStartupSuggestion = e => {
     e.preventDefault()
-    setLoading(true)
+
+    if (validationsFailed())
+      return
 
     let processedQuery = true;
     Object.values(query).forEach(item => {
@@ -503,15 +542,20 @@ function Contact(props) {
     })
     if (!processedQuery) {
       setNotif(true);
-      setLoading(false)
-      setNotificationMsg("Please do proper weightages to all questions!")
+      setNotificationMsg("Please fill out the missing fields!")
       return
     }
+
+    setLoading(true)
+
     startupSuggestion({
       investor: values,
       ratings: query
     })
       .then(({ results }) => {
+
+        setValues({ ...values, startup_selected: '' })
+
         setModal(true)
         setResponse(results)
         setNotif(true);
@@ -534,6 +578,14 @@ function Contact(props) {
   };
 
   const handleSelectChange = name => item => {
+
+    if (name === "country") {
+      if (item.value === "united_states_of_america")
+        setShowState(true)
+      else
+        setShowState(false)
+    }
+
     setValues({ ...values, [name]: item.value });
   }
 
@@ -565,30 +617,40 @@ function Contact(props) {
         isOpen={modal}
         style={customStyles}
       >
-        <h2 style={{ color: 'grey', marginBottom: '40px' }}>Startups</h2>
+        <h2 style={{ color: 'grey', marginBottom: '40px' }}>Results</h2>
 
         {response?.length == 0 ?
           <h3 style={{ marginTop: '40px' }}>No Startups are added in the system</h3>
-          : null
+          : <h3 style={{ marginTop: '20px' }}>These are your potential startups matches</h3>
         }
-        {
-          response?.map((item, index) =>
-            <div key={index}>
-              <h3 style={{ marginTop: '20px', marginBottom: '5px' }}>{`${item.company_name} (${item.match_score}%)`}</h3>
-              <div style={{ width: '100%', marginBottom: '30px' }}>
-                <Progress completed={item.match_score} />
+
+        {response && <RadioGroup name="startup_selected" selectedValue={values.startup_selected} onChange={handleRadioChange("startup_selected")}>
+          {
+            response?.map((item, index) =>
+              <div key={index}>
+                <Radio value={`${item.id}`} />
+                <h3 style={{ marginTop: '20px', marginLeft: '20px', display: 'inline-block', marginBottom: '5px' }}>{`${item.company_name} (${item.match_score}%)`}</h3>
+                <div style={{ width: '100%', marginBottom: '30px' }}>
+                  <Progress completed={item.match_score} />
+                </div>
               </div>
-            </div>
-          )
-        }
+            )
+          }
+        </RadioGroup>}
 
-        <Button style={{ margin: 'auto', display: 'block', width: '80%' }} onClick={e => {
-          e.preventDefault();
 
+        <Button onClick={() => {
+          handleSubmit()
+        }} disabled={loading} style={{ margin: 'auto', marginBottom: '15px', display: 'block', width: '80%' }} variant="outlined" color="primary" size="large">
+          Save Record
+        </Button>
+
+        <Button disabled={loading} style={{ margin: 'auto', display: 'block', width: '80%' }} onClick={e => {
           setModal(false)
         }} variant="outlined" type="submit" color="primary" size="large">
-          Close
+          Back
         </Button>
+
       </Modal>
 
       <Snackbar
@@ -618,37 +680,34 @@ function Contact(props) {
       <Container maxWidth="md">
         <Typography variant="h3" gutterBottom className={text.title}>
           {/* {t('common:contact_title')} */}
-          Investor Details
-        </Typography>
-        <Typography className={clsx(classes.desc, text.subtitle2)}>
-          Our platform provides best startups suggestions to you
+          Investor Information
         </Typography>
         <div className={classes.form}>
           <ValidatorForm
-            onSubmit={handleSubmit}
+            onSubmit={handleStartupSuggestion}
             onError={errors => console.log(errors)}
           >
             <Grid container spacing={4}>
               <Grid item xs={12}>
                 <TextValidator
                   className={classes.input}
-                  label={"First Name"}
+                  label={"First Name *"}
                   onChange={handleChange('first_name')}
                   name="first_name"
                   value={values.first_name}
-                  validators={['required']}
-                  errorMessages={['This field is required']}
+                  validators={['required', 'matchRegexp:^[a-zA-Z ]*$']}
+                  errorMessages={['This field is required', 'Only words are allowed']}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextValidator
                   className={classes.input}
-                  label={"Last Name"}
+                  label={"Last Name *"}
                   onChange={handleChange('last_name')}
                   name="last_name"
                   value={values.last_name}
-                  validators={['required']}
-                  errorMessages={['This field is required']}
+                  validators={['required', 'matchRegexp:^[a-zA-Z ]*$']}
+                  errorMessages={['This field is required', 'Only words are allowed']}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -658,14 +717,15 @@ function Contact(props) {
                   onChange={handleChange('phone_number')}
                   name="phone_number"
                   value={values.phone_number}
-                  validators={['required']}
-                  errorMessages={['This field is required']}
+                  type="number"
+                // validators={['matchRegexp:^[0-9]*$']}
+                // errorMessages={['Only numbers are allowed']}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextValidator
                   className={classes.input}
-                  label={"Email"}
+                  label={"Email **"}
                   onChange={handleChange('email')}
                   name="email"
                   value={values.email}
@@ -680,13 +740,13 @@ function Contact(props) {
                   onChange={handleChange('website')}
                   name="website"
                   value={values.website}
-                  validators={['required']}
-                  errorMessages={['This field is required']}
+                // validators={['required']}
+                // errorMessages={['This field is required']}
                 />
               </Grid>
               <Grid item xs={12}>
                 <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block' }}>
-                  Select Country
+                  Select Country *
                 </span>
                 <Select
                   options={countries}
@@ -694,16 +754,16 @@ function Contact(props) {
                   onChange={handleSelectChange("country")}
                 />
               </Grid>
-              <Grid item xs={12}>
+              {showState && <Grid item xs={12}>
                 <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block' }}>
-                  What state are you located (US only)
+                  What state are you located (US only) *
                 </span>
                 <Select
                   options={states}
                   value={states.find(item => item.value == values.state)}
                   onChange={handleSelectChange("state")}
                 />
-              </Grid>
+              </Grid>}
               <Grid item xs={12}>
                 <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block' }}>
                   Are you part of an Angel group or Syndicate?
@@ -734,9 +794,11 @@ function Contact(props) {
                 />
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid item xs={8}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
-                  What stage would you like to invest in? Select ALL that apply.
+                  What stage would you like to invest in?
+                  <span style={{ display: 'block' }}>(Please select ALL that apply.)</span>
+                  <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold' }}>Please rate importance 1-5 **</span>
                 </span>
 
                 {all.investment_stages.map(stage =>
@@ -747,7 +809,7 @@ function Contact(props) {
                         checked={stage.checked}
                         value={stage.value}
                         onChange={() => handleCheckBoxesSelect("investment_stages", all.investment_stages, stage.id)}
-                        color="primary"
+                        color="black"
                       />
                     )}
                     label={(
@@ -760,7 +822,7 @@ function Contact(props) {
                 }
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <div style={{ paddingTop: '15px' }}>
                   <StarRatings
                     rating={query.investment_stages}
@@ -768,7 +830,7 @@ function Contact(props) {
                     changeRating={handleRatings}
                     numberOfStars={5}
                     name='investment_stages'
-                    starDimension={"30px"}
+                    starDimension={"25px"}
                   />
                 </div>
               </Grid>
@@ -786,7 +848,7 @@ function Contact(props) {
                         checked={stage.checked}
                         value={stage.value}
                         onChange={() => handleCheckBoxesSelect("last_investment_stages", all.last_investment_stages, stage.id)}
-                        color="primary"
+                        color="black"
                       />
                     )}
                     label={(
@@ -799,19 +861,21 @@ function Contact(props) {
                 }
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid item xs={8}>
                 <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block' }}>
                   How much are you looking to invest in a given deal?
                 </span>
+                <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold' }}>Please rate importance 1-5 **</span>
+
                 <RadioGroup name="investment_rates" selectedValue={values.investment_rates} onChange={handleRadioChange("investment_rates")}>
-                  <div style={{ marginTop: '5px' }}><Radio value="25K" /> $25,000-$100,000</div>
+                  <div style={{ marginTop: '15px' }}><Radio value="25K" /> $25,000-$100,000</div>
                   <div style={{ marginTop: '10px' }}><Radio value="100K" /> $100,000-$500,000</div>
                   <div style={{ marginTop: '10px' }}><Radio value="500K" /> $500,000-$1,000,000</div>
                   <div style={{ marginTop: '10px' }}><Radio value="1M" /> Above $1M</div>
                 </RadioGroup>
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <div style={{ paddingTop: '5px' }}>
                   <StarRatings
                     rating={query.investment_rates}
@@ -819,14 +883,16 @@ function Contact(props) {
                     changeRating={handleRatings}
                     numberOfStars={5}
                     name='investment_rates'
-                    starDimension={"30px"}
+                    starDimension={"25px"}
                   />
                 </div>
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid style={{ paddingRight: '0px' }} item xs={8}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
-                  Which category would you be interested to invest in? Select ALL that applies.
+                  Which category would you be interested to invest in?
+                  <span style={{ display: 'block' }}>(Please select ALL that apply.)</span>
+                  <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold' }}>Please rate importance 1-5 **</span>
                 </span>
 
                 {all.investment_category.map(category =>
@@ -837,7 +903,7 @@ function Contact(props) {
                         checked={category.checked}
                         value={category.value}
                         onChange={() => handleCheckBoxesSelect("investment_category", all.investment_category, category.id)}
-                        color="primary"
+                        color="black"
                       />
                     )}
                     label={(
@@ -850,7 +916,7 @@ function Contact(props) {
                 }
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <div style={{ paddingTop: '15px' }}>
                   <StarRatings
                     rating={query.investment_category}
@@ -858,14 +924,14 @@ function Contact(props) {
                     changeRating={handleRatings}
                     numberOfStars={5}
                     name='investment_category'
-                    starDimension={"30px"}
+                    starDimension={"25px"}
                   />
                 </div>
               </Grid>
 
               <Grid item xs={12}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
-                  Previous investment Industry? Select ALL that applies.
+                  Previous investment Industry? (Please select ALL that apply.)
                 </span>
 
                 {all.investment_industry.map(industry =>
@@ -876,7 +942,7 @@ function Contact(props) {
                         checked={industry.checked}
                         value={industry.value}
                         onChange={() => handleCheckBoxesSelect("investment_industry", all.investment_industry, industry.id)}
-                        color="primary"
+                        color="black"
                       />
                     )}
                     label={(
@@ -889,9 +955,11 @@ function Contact(props) {
                 }
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid style={{ paddingRight: '0px' }} item xs={8}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
-                  Which emerging technology trend are you most interested in? Select ALL that applies.
+                  Which emerging technology trend are you most interested in?
+                  <span style={{ display: 'block' }}>(Please select ALL that apply.)</span>
+                  <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold' }}>Please rate importance 1-5 **</span>
                 </span>
 
                 {all.emerging_technologies.map(technology =>
@@ -902,7 +970,7 @@ function Contact(props) {
                         checked={technology.checked}
                         value={technology.value}
                         onChange={() => handleCheckBoxesSelect("emerging_technologies", all.emerging_technologies, technology.id)}
-                        color="primary"
+                        color="black"
                       />
                     )}
                     label={(
@@ -915,7 +983,7 @@ function Contact(props) {
                 }
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <div style={{ paddingTop: '15px' }}>
                   <StarRatings
                     rating={query.emerging_technologies}
@@ -923,14 +991,14 @@ function Contact(props) {
                     changeRating={handleRatings}
                     numberOfStars={5}
                     name='emerging_technologies'
-                    starDimension={"30px"}
+                    starDimension={"25px"}
                   />
                 </div>
               </Grid>
 
               <Grid item xs={12}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
-                  Have you previously invested in the following emerging technologies? Select ALL that applies.
+                  Have you previously invested in the following emerging technologies? (Please select ALL that apply.)
                 </span>
 
                 {all.previous_emerging_technologies.map(technology =>
@@ -941,7 +1009,7 @@ function Contact(props) {
                         checked={technology.checked}
                         value={technology.value}
                         onChange={() => handleCheckBoxesSelect("previous_emerging_technologies", all.previous_emerging_technologies, technology.id)}
-                        color="primary"
+                        color="black"
                       />
                     )}
                     label={(
@@ -974,12 +1042,7 @@ function Contact(props) {
             </Grid>
             <div style={{ marginTop: '50px' }} className={classes.btnArea}>
               <Button disabled={loading} style={{ margin: 'auto' }} variant="outlined" type="submit" color="primary" size="large">
-                Save Record
-              </Button>
-
-              <Button disabled={loading} style={{ margin: 'auto' }} onClick={handleStartupSuggestion} variant="outlined" type="submit" color="primary" size="large">
                 Suggest Startups
-                {/* <SendIcon className={classes.rightIcon} /> */}
               </Button>
             </div>
           </ValidatorForm>
