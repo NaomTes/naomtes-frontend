@@ -358,6 +358,8 @@ function Contact(props) {
   const { t } = props;
   const classes = useStyles();
   const text = useText();
+  const [formikHook, setFormikHook] = useState(false)
+
   const defaultValues = {
     investment_stages: [
       { id: 1, value: 'pre_seeding_investing', checked: false, label: 'Pre-seed Investing' },
@@ -475,6 +477,8 @@ function Contact(props) {
   };
 
   let validationsFailed = () => {
+    setFormikHook(true)
+
     if (values.country === '') {
       setNotif(true);
       setNotificationMsg("Please Select Country!")
@@ -487,7 +491,7 @@ function Contact(props) {
       }
     }
 
-    if (values.investment_stages.length == 0 || values.last_investment_stages.length == 0 || values.investment_category.length == 0 || values.investment_industry.length == 0 || values.emerging_technologies.length == 0 || values.previous_emerging_technologies.length == 0) {
+    if (values.investment_stages.length == 0 || values.investment_category.length == 0 || values.emerging_technologies.length == 0) {
       setNotif(true);
       setNotificationMsg("Please Select one or more options!")
       return true
@@ -740,12 +744,10 @@ function Contact(props) {
                   onChange={handleChange('website')}
                   name="website"
                   value={values.website}
-                // validators={['required']}
-                // errorMessages={['This field is required']}
                 />
               </Grid>
               <Grid item xs={12}>
-                <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block' }}>
+                <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block', color: `${formikHook && values.country == "" ? 'red' : 'black'}` }}>
                   Select Country *
                 </span>
                 <Select
@@ -755,7 +757,7 @@ function Contact(props) {
                 />
               </Grid>
               {showState && <Grid item xs={12}>
-                <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block' }}>
+                <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block', color: `${formikHook && values.state == "" ? 'red' : 'black'}` }}>
                   What state are you located (US only) *
                 </span>
                 <Select
@@ -795,10 +797,10 @@ function Contact(props) {
               </Grid>
 
               <Grid item xs={8}>
-                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
+                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_stages.length == 0 ? 'red' : 'black'}` }}>
                   What stage would you like to invest in?
                   <span style={{ display: 'block' }}>(Please select ALL that apply.)</span>
-                  <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold' }}>Please rate importance 1-5 **</span>
+                  <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: 'black', color: `${formikHook && query.investment_stages == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
                 </span>
 
                 {all.investment_stages.map(stage =>
@@ -862,10 +864,10 @@ function Contact(props) {
               </Grid>
 
               <Grid item xs={8}>
-                <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block' }}>
+                <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_rates == '' ? 'red' : 'black'}` }}>
                   How much are you looking to invest in a given deal?
                 </span>
-                <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold' }}>Please rate importance 1-5 **</span>
+                <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: `${formikHook && query.investment_rates == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
 
                 <RadioGroup name="investment_rates" selectedValue={values.investment_rates} onChange={handleRadioChange("investment_rates")}>
                   <div style={{ marginTop: '15px' }}><Radio value="25K" /> $25,000-$100,000</div>
@@ -889,10 +891,10 @@ function Contact(props) {
               </Grid>
 
               <Grid style={{ paddingRight: '0px' }} item xs={8}>
-                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
+                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_category.length == 0 ? 'red' : 'black'}` }}>
                   Which category would you be interested to invest in?
                   <span style={{ display: 'block' }}>(Please select ALL that apply.)</span>
-                  <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold' }}>Please rate importance 1-5 **</span>
+                  <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: `${formikHook && query.investment_category == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
                 </span>
 
                 {all.investment_category.map(category =>
@@ -956,10 +958,10 @@ function Contact(props) {
               </Grid>
 
               <Grid style={{ paddingRight: '0px' }} item xs={8}>
-                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
+                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.emerging_technologies.length == 0 ? 'red' : 'black'}` }}>
                   Which emerging technology trend are you most interested in?
                   <span style={{ display: 'block' }}>(Please select ALL that apply.)</span>
-                  <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold' }}>Please rate importance 1-5 **</span>
+                  <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: 'black', color: `${formikHook && query.emerging_technologies == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
                 </span>
 
                 {all.emerging_technologies.map(technology =>
@@ -1048,7 +1050,7 @@ function Contact(props) {
           </ValidatorForm>
         </div>
       </Container>
-    </div>
+    </div >
   );
 }
 
