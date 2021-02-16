@@ -342,13 +342,18 @@ const countries = [
 ];
 
 
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useTheme } from '@material-ui/core/styles';
+
 
 function Contact(props) {
   const { t } = props;
   const classes = useStyles();
   const text = useText();
   const [formikHook, setFormikHook] = useState(false)
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
   const defaultValues = {
     investment_stages: [
       { id: 1, value: 'pre_seeding_investing', checked: false, label: 'Pre-seed Investing' },
@@ -792,13 +797,28 @@ function Contact(props) {
                 />
               </Grid>
 
-              <Grid item xs={8}>
+              <Grid item xd={12} md={8}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_stages.length == 0 ? 'red' : 'black'}` }}>
                   What stage would you like to invest in? *
                   <span style={{ display: 'block' }}>(Please select ALL that apply.)</span>
                   <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: 'black', color: `${formikHook && query.investment_stages == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
                 </span>
+              </Grid>
 
+              <Grid item xs={12} md={4}>
+                <div style={{ paddingTop: '15px' }}>
+                  <StarRatings
+                    rating={query.investment_stages}
+                    starRatedColor="orange"
+                    changeRating={handleRatings}
+                    numberOfStars={5}
+                    name='investment_stages'
+                    starDimension={"25px"}
+                  />
+                </div>
+              </Grid>
+
+              <Grid item xs={12}>
                 {all.investment_stages.map(stage =>
                   <div><FormControlLabel
                     id={stage.id}
@@ -818,19 +838,6 @@ function Contact(props) {
                   /></div>
                 )
                 }
-              </Grid>
-
-              <Grid item xs={4}>
-                <div style={{ paddingTop: '15px' }}>
-                  <StarRatings
-                    rating={query.investment_stages}
-                    starRatedColor="orange"
-                    changeRating={handleRatings}
-                    numberOfStars={5}
-                    name='investment_stages'
-                    starDimension={"25px"}
-                  />
-                </div>
               </Grid>
 
               <Grid item xs={12}>
