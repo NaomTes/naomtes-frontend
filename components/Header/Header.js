@@ -147,7 +147,7 @@ function Header(props) {
                   </li>
                 </Scrollspy>
               )}
-              <Settings toggleDark={onToggleDark} toggleDir={onToggleDir} invert={invert} />
+              {/* <Settings toggleDark={onToggleDark} toggleDir={onToggleDir} invert={invert} /> */}
             </nav>
           </div>
         </Container>
