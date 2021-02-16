@@ -36,6 +36,22 @@ function MobileMenu(props) {
           <ListItem
             button
             component="a"
+            href={routeLink.agency.investor}
+            style={{ animationDuration: navMenu.length * 0.15 + 's' }}
+          >
+            <ListItemText primary={"Investor"} className={classes.menuList} />
+          </ListItem>
+          <ListItem
+            button
+            component="a"
+            href={routeLink.agency.startup}
+            style={{ animationDuration: navMenu.length * 0.15 + 's' }}
+          >
+            <ListItemText primary={"Startup"} className={classes.menuList} />
+          </ListItem>
+          <ListItem
+            button
+            component="a"
             href={routeLink.agency.contact}
             style={{ animationDuration: navMenu.length * 0.15 + 's' }}
           >
