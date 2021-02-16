@@ -806,12 +806,27 @@ function Contact(props) {
                 />
               </Grid>
 
-              <Grid item xs={8}>
+              <Grid item md={8} xs={12}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_stages.length == 0 ? 'red' : 'black'}` }}>
                   What stage are you currently in? *
                   <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: 'black', color: `${formikHook && query.investment_stages == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
                 </span>
+              </Grid>
 
+              <Grid item md={4} xs={12}>
+                <div style={{ paddingTop: '15px' }}>
+                  <StarRatings
+                    rating={query.investment_stages}
+                    starRatedColor="orange"
+                    changeRating={handleRatings}
+                    numberOfStars={5}
+                    name='investment_stages'
+                    starDimension={"25px"}
+                  />
+                </div>
+              </Grid>
+
+              <Grid style={{ paddingTop: '0px' }} item xs={12}>
                 {all.investment_stages.map(stage =>
                   <div><FormControlLabel
                     id={stage.id}
@@ -831,19 +846,6 @@ function Contact(props) {
                   /></div>
                 )
                 }
-              </Grid>
-
-              <Grid item xs={4}>
-                <div style={{ paddingTop: '15px' }}>
-                  <StarRatings
-                    rating={query.investment_stages}
-                    starRatedColor="orange"
-                    changeRating={handleRatings}
-                    numberOfStars={5}
-                    name='investment_stages'
-                    starDimension={"25px"}
-                  />
-                </div>
               </Grid>
 
               <Grid item xs={12}>
@@ -872,21 +874,14 @@ function Contact(props) {
                 }
               </Grid>
 
-              <Grid item xs={8}>
+              <Grid item xs={12} md={8}>
                 <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_rates == '' ? 'red' : 'black'}` }}>
                   How much funding are you looking to raise? *
                 </span>
                 <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: `${formikHook && query.investment_rates == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
-
-                <RadioGroup name="investment_rates" selectedValue={values.investment_rates} onChange={handleRadioChange("investment_rates")}>
-                  <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="25K" id="1_25K" /> <label for="1_25K">$25,000-$100,000</label></div>
-                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="100K" id="1_100k" /> <label for="1_100k">$100,000-$500,000</label></div>
-                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="500K" id="1_500k" /> <label for="1_500k">$500,000-$1,000,000</label></div>
-                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="1M" id="1_1M" /> <label for="1_1M">Above $1M</label></div>
-                </RadioGroup>
               </Grid>
 
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <div style={{ paddingTop: '5px' }}>
                   <StarRatings
                     rating={query.investment_rates}
@@ -897,6 +892,15 @@ function Contact(props) {
                     starDimension={"25px"}
                   />
                 </div>
+              </Grid>
+
+              <Grid style={{ paddingTop: '0px' }} item xs={12}>
+                <RadioGroup name="investment_rates" selectedValue={values.investment_rates} onChange={handleRadioChange("investment_rates")}>
+                  <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="25K" id="1_25K" /> <label for="1_25K">$25,000-$100,000</label></div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="100K" id="1_100k" /> <label for="1_100k">$100,000-$500,000</label></div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="500K" id="1_500k" /> <label for="1_500k">$500,000-$1,000,000</label></div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="1M" id="1_1M" /> <label for="1_1M">Above $1M</label></div>
+                </RadioGroup>
               </Grid>
 
               <Grid item xs={12}>
@@ -911,14 +915,28 @@ function Contact(props) {
                 </RadioGroup>
               </Grid>
 
-
-              <Grid item xs={8}>
+              <Grid item xs={12} md={8}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_category.length == 0 ? 'red' : 'black'}` }}>
                   Which industry best describes your startup positioned to disrupt?
                   <span style={{ display: 'block' }}>(Please select ALL that apply.)</span>
                   <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: `${formikHook && query.investment_category == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
                 </span>
+              </Grid>
 
+              <Grid item xs={12} md={4}>
+                <div style={{ paddingTop: '15px' }}>
+                  <StarRatings
+                    rating={query.investment_category}
+                    starRatedColor="orange"
+                    changeRating={handleRatings}
+                    numberOfStars={5}
+                    name='investment_category'
+                    starDimension={"25px"}
+                  />
+                </div>
+              </Grid>
+
+              <Grid style={{ paddingTop: '0px' }} item xs={12}>
                 {all.investment_category.map(category =>
                   <div><FormControlLabel
                     id={category.id}
@@ -938,19 +956,6 @@ function Contact(props) {
                   /></div>
                 )
                 }
-              </Grid>
-
-              <Grid item xs={4}>
-                <div style={{ paddingTop: '15px' }}>
-                  <StarRatings
-                    rating={query.investment_category}
-                    starRatedColor="orange"
-                    changeRating={handleRatings}
-                    numberOfStars={5}
-                    name='investment_category'
-                    starDimension={"25px"}
-                  />
-                </div>
               </Grid>
 
               <Grid item xs={12}>
@@ -979,13 +984,28 @@ function Contact(props) {
                 }
               </Grid>
 
-              <Grid item xs={8}>
+              <Grid item xs={12} md={8}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.emerging_technologies.length == 0 ? 'red' : 'black'}` }}>
                   Which emerging technology best describes your startup? *
                   <span style={{ display: 'block' }}>(Please select ALL that apply.)</span>
                   <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: 'black', color: `${formikHook && query.emerging_technologies == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
                 </span>
+              </Grid>
 
+              <Grid item xs={12} md={4}>
+                <div style={{ paddingTop: '15px' }}>
+                  <StarRatings
+                    rating={query.emerging_technologies}
+                    starRatedColor="orange"
+                    changeRating={handleRatings}
+                    numberOfStars={5}
+                    name='emerging_technologies'
+                    starDimension={"25px"}
+                  />
+                </div>
+              </Grid>
+
+              <Grid style={{ paddingTop: '0px' }} item xs={12}>
                 {all.emerging_technologies.map(technology =>
                   <div><FormControlLabel
                     id={technology.id}
@@ -1005,19 +1025,6 @@ function Contact(props) {
                   /></div>
                 )
                 }
-              </Grid>
-
-              <Grid item xs={4}>
-                <div style={{ paddingTop: '15px' }}>
-                  <StarRatings
-                    rating={query.emerging_technologies}
-                    starRatedColor="orange"
-                    changeRating={handleRatings}
-                    numberOfStars={5}
-                    name='emerging_technologies'
-                    starDimension={"25px"}
-                  />
-                </div>
               </Grid>
 
               <Grid item xs={12}>
