@@ -20,25 +20,14 @@ import StarRatings from 'react-star-ratings';
 import useStyles from './form-style-pro';
 import Select from 'react-select';
 import { RadioGroup, Radio } from 'react-radio-group'
-import { Spinner } from 'react-bootstrap'
+import { Spinner, Modal as Modal2 } from 'react-bootstrap'
 import './style-pro.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import Progress from 'react-progressbar'
 
 import { createInvestor, startupSuggestion } from './api'
 import Modal from 'react-modal';
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    width: '90vw',
-    height: '95vh',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-};
-
 
 var states = [
   { label: 'ALABAMA', value: 'AL' },
@@ -493,13 +482,13 @@ function Contact(props) {
 
     if (values.investment_stages.length == 0 || values.investment_category.length == 0 || values.emerging_technologies.length == 0) {
       setNotif(true);
-      setNotificationMsg("Please Select one or more options!")
+      setNotificationMsg("Please fill out the missing fields!")
       return true
     }
 
     if (values.investment_rates == "") {
       setNotif(true);
-      setNotificationMsg("Please Select one or more options!")
+      setNotificationMsg("Please fill out the missing fields!")
       return true
     }
     return false;
@@ -523,6 +512,7 @@ function Contact(props) {
         setValues(defaultObject)
         setAllValue(defaultValues)
         setQuery(defaultQuery)
+        setFormikHook(false)
 
       })
       .catch((errors) => {
@@ -617,45 +607,51 @@ function Contact(props) {
 
   return (
     <div className={classes.formWrap}>
-      <Modal
-        isOpen={modal}
-        style={customStyles}
+
+      <Modal2
+        show={modal}
+        backdrop="static"
+        keyboard={false}
+        size="xl"
       >
-        <h2 style={{ color: 'grey', marginBottom: '40px' }}>Results</h2>
+        <Modal2.Header>
+          <Modal2.Title>Results</Modal2.Title>
+        </Modal2.Header>
+        <Modal2.Body>
+          <div style={{ margin: '0px 0px 30px 30px' }}>
+            {response?.length == 0 ?
+              <h3 style={{ marginTop: '40px' }}>No Startups are added in the system</h3>
+              : <h3 style={{ marginTop: '20px' }}>These are your potential startups matches</h3>
+            }
 
-        {response?.length == 0 ?
-          <h3 style={{ marginTop: '40px' }}>No Startups are added in the system</h3>
-          : <h3 style={{ marginTop: '20px' }}>These are your potential startups matches</h3>
-        }
+            {response && <RadioGroup name="startup_selected" selectedValue={values.startup_selected} onChange={handleRadioChange("startup_selected")}>
+              {
+                response?.map((item, index) =>
+                  <div key={index}>
+                    <Radio value={`${item.id}`} id={`top_${item.id}`} />
+                    <label for={`top_${item.id}`} style={{ marginTop: '20px', marginLeft: '15px', display: 'inline-block', fontSize: '16px', fontWeight: 'bold', marginBottom: '5px' }}>{`${item.company_name} (${item.match_score}%)`}</label>
+                    <div style={{ width: '100%', marginBottom: '30px' }}>
+                      <Progress completed={item.match_score} />
+                    </div>
+                  </div>
+                )
+              }
+            </RadioGroup>}
+          </div>
 
-        {response && <RadioGroup name="startup_selected" selectedValue={values.startup_selected} onChange={handleRadioChange("startup_selected")}>
-          {
-            response?.map((item, index) =>
-              <div key={index}>
-                <Radio value={`${item.id}`} />
-                <h3 style={{ marginTop: '20px', marginLeft: '20px', display: 'inline-block', marginBottom: '5px' }}>{`${item.company_name} (${item.match_score}%)`}</h3>
-                <div style={{ width: '100%', marginBottom: '30px' }}>
-                  <Progress completed={item.match_score} />
-                </div>
-              </div>
-            )
-          }
-        </RadioGroup>}
-
-
-        <Button onClick={() => {
-          handleSubmit()
-        }} disabled={loading} style={{ margin: 'auto', marginBottom: '15px', display: 'block', width: '80%' }} variant="outlined" color="primary" size="large">
-          Save Record
+          <Button onClick={() => {
+            handleSubmit()
+          }} disabled={loading} style={{ margin: 'auto', marginBottom: '15px', display: 'block', width: '80%' }} variant="outlined" color="primary" size="large">
+            Save Record
         </Button>
 
-        <Button disabled={loading} style={{ margin: 'auto', display: 'block', width: '80%' }} onClick={e => {
-          setModal(false)
-        }} variant="outlined" type="submit" color="primary" size="large">
-          Back
+          <Button disabled={loading} style={{ margin: 'auto', display: 'block', width: '80%' }} onClick={e => {
+            setModal(false)
+          }} variant="outlined" type="submit" color="primary" size="large">
+            Back
         </Button>
-
-      </Modal>
+        </Modal2.Body>
+      </Modal2>
 
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -771,8 +767,8 @@ function Contact(props) {
                   Are you part of an Angel group or Syndicate?
                 </span>
                 <RadioGroup name="syndicate_group" selectedValue={values.syndicate_group} onChange={handleRadioChange("syndicate_group")}>
-                  <div style={{ marginTop: '5px' }}><Radio value="yes" /> YES</div>
-                  <div style={{ marginTop: '10px' }}><Radio value="no" /> NO</div>
+                  <div style={{ marginTop: '5px' }}><Radio value="yes" id="yes_1" /> <label for="yes_1">YES</label></div>
+                  <div style={{ marginTop: '10px' }}><Radio value="no" id="no_1" /> <label for="no_1">NO</label> </div>
                 </RadioGroup>
               </Grid>
 
@@ -870,10 +866,10 @@ function Contact(props) {
                 <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: `${formikHook && query.investment_rates == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
 
                 <RadioGroup name="investment_rates" selectedValue={values.investment_rates} onChange={handleRadioChange("investment_rates")}>
-                  <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="25K" /> $25,000-$100,000</div>
-                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="100K" /> $100,000-$500,000</div>
-                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="500K" /> $500,000-$1,000,000</div>
-                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="1M" /> Above $1M</div>
+                  <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="25K" id="1_25K" /><label for="1_25K">$25,000-$100,000</label></div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="100K" id="1_100k" /> <label for="1_100k">$100,000-$500,000</label></div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="500K" id="1_500k" /> <label for="1_500k">$500,000-$1,000,000</label></div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="1M" id="1_1M" /> <label for="1_1M">Above $1M</label></div>
                 </RadioGroup>
               </Grid>
 
