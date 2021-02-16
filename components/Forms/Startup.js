@@ -17,10 +17,12 @@ import logo from '~public/images/logo-agency.png';
 import { withTranslation } from '~/i18n';
 import Checkbox from './Checkbox';
 import StarRatings from 'react-star-ratings';
-import useStyles from './form-style';
+import useStyles from './form-style-pro';
 import Select from 'react-select';
 import { RadioGroup, Radio } from 'react-radio-group'
-import { ProgressBar } from 'react-bootstrap'
+import { Spinner, Modal as Modal2 } from 'react-bootstrap'
+import './style-pro.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Modal from 'react-modal';
 const customStyles = {
@@ -335,7 +337,7 @@ const countries = [
   { value: "ukraine", label: "Ukraine" },
   { value: "united_arab_emirates", label: "United Arab Emirates" },
   { value: "united_kingdom", label: "United Kingdom" },
-  { value: "united_states_of america", label: "United States of America" },
+  { value: "united_states_of_america", label: "United States of America" },
   { value: "uruguay", label: "Uruguay" },
   { value: "uzbekistan", label: "Uzbekistan" },
   { value: "vanuatu", label: "Vanuatu" },
@@ -357,6 +359,8 @@ function Contact(props) {
   const [response, setResponse] = useState(null)
   const classes = useStyles();
   const text = useText();
+  const [formikHook, setFormikHook] = useState(false)
+
   const defaultValues = {
     investment_stages: [
       { id: 1, value: 'pre_seeding_investing', checked: false, label: 'Pre-seed Investing' },
@@ -455,7 +459,9 @@ function Contact(props) {
     value_preposition: '',
     competitors: '',
     additional_comments: '',
-    about_us: ''
+    about_us: '',
+
+    investor_selected: ''
   }
 
   const [values, setValues] = useState(defaultObject);
@@ -474,18 +480,54 @@ function Contact(props) {
     setValues({ ...values, [name]: event.target.value });
   };
 
+  let validationsFailed = () => {
+    setFormikHook(true)
+
+    if (values.country === '') {
+      setNotif(true);
+      setNotificationMsg("Please Select Country!")
+      return true
+    } else if (values.country === 'united_states_of_america') {
+      if (values.state === "") {
+        setNotif(true);
+        setNotificationMsg("Please Select State!")
+        return true
+      }
+    }
+
+    if (values.investment_stages.length == 0 || values.investment_category.length == 0 || values.emerging_technologies.length == 0) {
+      setNotif(true);
+      setNotificationMsg("Please fill out the missing fields!")
+      return true
+    }
+
+    if (values.investment_rates == "") {
+      setNotif(true);
+      setNotificationMsg("Please fill out the missing fields!")
+      return true
+    }
+    return false;
+  }
+
   const handleSubmit = e => {
+    if (values.investor_selected == "") {
+      setNotif(true);
+      setNotificationMsg("Select one investor!")
+      return;
+    }
+
     setLoading(true)
-    e.preventDefault()
 
     createStartup({ startups: values })
       .then(response => {
         console.log("response -> ", response)
         setNotif(true);
         setNotificationMsg("Record Inserted!")
+        setModal(false)
         setValues(defaultObject)
         setAllValue(defaultValues)
         setQuery(defaultQuery)
+        setFormikHook(false)
 
       })
       .catch((errors) => {
@@ -501,7 +543,16 @@ function Contact(props) {
     setNotif(false);
   };
 
+  const [showState, setShowState] = useState(false);
+
   const handleSelectChange = name => item => {
+    if (name === "country") {
+      if (item.value === "united_states_of_america")
+        setShowState(true)
+      else
+        setShowState(false)
+    }
+
     setValues({ ...values, [name]: item.value });
   }
 
@@ -529,7 +580,9 @@ function Contact(props) {
 
   let handleInvestorSuggestion = e => {
     e.preventDefault()
-    setLoading(true)
+
+    if (validationsFailed())
+      return
 
     let processedQuery = true;
     Object.values(query).forEach(item => {
@@ -537,18 +590,21 @@ function Contact(props) {
     })
     if (!processedQuery) {
       setNotif(true);
-      setLoading(false)
-      setNotificationMsg("Please do proper weightages to all questions!")
+      setNotificationMsg("Please fill out the missing fields!")
       return
     }
+
+    setLoading(true)
+
     investorSuggestion({
       startup: values,
       ratings: query
     })
       .then(({ results }) => {
+        setValues({ ...values, investor_selected: '' })
+
         setModal(true)
         console.log(results)
-        // let limited_response = results.filter((_, index) => index < 5)
         setResponse(results)
         setNotif(true);
         setNotificationMsg("Results are processed!")
@@ -566,36 +622,50 @@ function Contact(props) {
 
   return (
     <div className={classes.formWrap}>
-      <Modal
-        isOpen={modal}
-        style={customStyles}
+      <Modal2
+        show={modal}
+        backdrop="static"
+        keyboard={false}
+        size="xl"
       >
-        <h2 style={{ color: 'grey', marginBottom: '40px' }}>Investors</h2>
+        <Modal2.Header>
+          <Modal2.Title>Results</Modal2.Title>
+        </Modal2.Header>
+        <Modal2.Body>
+          <div style={{ margin: '0px 0px 30px 30px' }}>
+            {response?.length == 0 ?
+              <h3 style={{ marginTop: '40px' }}>No Investors are added in the system</h3>
+              : <h3 style={{ marginTop: '20px' }}>These are your potential investors matches</h3>
+            }
 
-        {response?.length == 0 ?
-          <h3 style={{ marginTop: '40px' }}>No Investors are added in the system</h3>
-          : null
-        }
+            {response && <RadioGroup name="investor_selected" selectedValue={values.investor_selected} onChange={handleRadioChange("investor_selected")}>
+              {
+                response?.map((item, index) =>
+                  <div key={index}>
+                    <Radio value={`${item.id}`} id={`top_${item.id}`} />
+                    <label for={`top_${item.id}`} style={{ marginTop: '20px', marginLeft: '15px', display: 'inline-block', fontSize: '16px', fontWeight: 'bold', marginBottom: '5px' }}>{`${item.investor_name} (${item.match_score}%)`}</label>
+                    <div style={{ width: '100%', marginBottom: '30px' }}>
+                      <Progress completed={item.match_score} />
+                    </div>
+                  </div>
+                )
+              }
+            </RadioGroup>}
+          </div>
 
-        {
-          response?.map((item, index) =>
-            <div key={index}>
-              <h3 style={{ marginTop: '20px', marginBottom: '5px' }}>{`${item.investor_name} (${item.match_score}%)`}</h3>
-              <div style={{ width: '100%', marginBottom: '30px' }}>
-                <Progress completed={item.match_score} />
-              </div>
-            </div>
-          )
-        }
-
-        <Button style={{ margin: 'auto', display: 'block', width: '80%' }} onClick={e => {
-          e.preventDefault();
-
-          setModal(false)
-        }} variant="outlined" type="submit" color="primary" size="large">
-          Close
+          <Button onClick={() => {
+            handleSubmit()
+          }} disabled={loading} style={{ margin: 'auto', marginBottom: '15px', display: 'block', width: '80%' }} variant="outlined" color="primary" size="large">
+            Save Record
         </Button>
-      </Modal>
+
+          <Button disabled={loading} style={{ margin: 'auto', display: 'block', width: '80%' }} onClick={e => {
+            setModal(false)
+          }} variant="outlined" type="submit" color="primary" size="large">
+            Back
+        </Button>
+        </Modal2.Body>
+      </Modal2>
 
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -624,37 +694,34 @@ function Contact(props) {
       <Container maxWidth="md">
         <Typography variant="h3" gutterBottom className={text.title}>
           {/* {t('common:contact_title')} */}
-          Startup Details
-        </Typography>
-        <Typography className={clsx(classes.desc, text.subtitle2)}>
-          Our platform provides best investor suggestions to you
+          Startup Information
         </Typography>
         <div className={classes.form}>
           <ValidatorForm
-            onSubmit={handleSubmit}
+            onSubmit={handleInvestorSuggestion}
             onError={errors => console.log(errors)}
           >
             <Grid container spacing={4}>
               <Grid item xs={12}>
                 <TextValidator
                   className={classes.input}
-                  label={"First Name"}
+                  label={"First Name *"}
                   onChange={handleChange('first_name')}
                   name="first_name"
                   value={values.first_name}
-                  validators={['required']}
-                  errorMessages={['This field is required']}
+                  validators={['required', 'matchRegexp:^[a-zA-Z ]*$']}
+                  errorMessages={['This field is required', 'Only words are allowed']}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextValidator
                   className={classes.input}
-                  label={"Last Name"}
+                  label={"Last Name *"}
                   onChange={handleChange('last_name')}
                   name="last_name"
                   value={values.last_name}
-                  validators={['required']}
-                  errorMessages={['This field is required']}
+                  validators={['required', 'matchRegexp:^[a-zA-Z ]*$']}
+                  errorMessages={['This field is required', 'Only words are allowed']}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -663,15 +730,14 @@ function Contact(props) {
                   label={"Phone Number"}
                   onChange={handleChange('phone_number')}
                   name="phone_number"
+                  type="number"
                   value={values.phone_number}
-                  validators={['required']}
-                  errorMessages={['This field is required']}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextValidator
                   className={classes.input}
-                  label={"Email"}
+                  label={"Email **"}
                   onChange={handleChange('email')}
                   name="email"
                   value={values.email}
@@ -682,7 +748,7 @@ function Contact(props) {
               <Grid item xs={12}>
                 <TextValidator
                   className={classes.input}
-                  label={"Company Name"}
+                  label={"Company Name *"}
                   onChange={handleChange('company_name')}
                   name="company_name"
                   value={values.company_name}
@@ -697,13 +763,11 @@ function Contact(props) {
                   onChange={handleChange('website')}
                   name="website"
                   value={values.website}
-                  validators={['required']}
-                  errorMessages={['This field is required']}
                 />
               </Grid>
               <Grid item xs={12}>
-                <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block' }}>
-                  Select Country
+                <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block', color: `${formikHook && values.country == "" ? 'red' : 'black'}` }}>
+                  Select Country *
                 </span>
                 <Select
                   options={countries}
@@ -711,24 +775,24 @@ function Contact(props) {
                   onChange={handleSelectChange("country")}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block' }}>
-                  What state are you located (US only)
+              {showState && <Grid item xs={12}>
+                <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block', color: `${formikHook && values.state == "" ? 'red' : 'black'}` }}>
+                  What state are you located (US only) *
                 </span>
                 <Select
                   options={states}
                   value={states.find(item => item.value == values.state)}
                   onChange={handleSelectChange("state")}
                 />
-              </Grid>
+              </Grid>}
               <Grid item xs={12}>
                 <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block' }}>
                   Are you part of an accelerator?
                 </span>
                 <RadioGroup name="part_of_accelerator" selectedValue={values.part_of_accelerator} onChange={handleRadioChange("part_of_accelerator")}>
-                  <div style={{ marginTop: '5px' }}><Radio value="yes" /> YES</div>
-                  <div style={{ marginTop: '10px' }}><Radio value="no" /> NO</div>
-                  <div style={{ marginTop: '10px' }}><Radio value="other" /> OTHER</div>
+                  <div style={{ marginTop: '10px' }}><Radio value="yes" id="yes_1" /> <label for="yes_1">YES</label></div>
+                  <div style={{ marginTop: '5px' }}><Radio value="no" id="no_1" /> <label for="no_1">NO</label></div>
+                  <div style={{ marginTop: '5px' }}><Radio value="other" id="other_1" /> <label for="other_1">OTHER</label></div>
                 </RadioGroup>
               </Grid>
 
@@ -742,9 +806,10 @@ function Contact(props) {
                 />
               </Grid>
 
-              <Grid item xs={6}>
-                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
-                  What stage are you currently in?
+              <Grid item xs={8}>
+                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_stages.length == 0 ? 'red' : 'black'}` }}>
+                  What stage are you currently in? *
+                  <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: 'black', color: `${formikHook && query.investment_stages == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
                 </span>
 
                 {all.investment_stages.map(stage =>
@@ -768,7 +833,7 @@ function Contact(props) {
                 }
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <div style={{ paddingTop: '15px' }}>
                   <StarRatings
                     rating={query.investment_stages}
@@ -776,7 +841,7 @@ function Contact(props) {
                     changeRating={handleRatings}
                     numberOfStars={5}
                     name='investment_stages'
-                    starDimension={"30px"}
+                    starDimension={"25px"}
                   />
                 </div>
               </Grid>
@@ -794,7 +859,7 @@ function Contact(props) {
                         checked={stage.checked}
                         value={stage.value}
                         onChange={() => handleCheckBoxesSelect("last_investment_stages", all.last_investment_stages, stage.id)}
-                        color="primary"
+                        color="black"
                       />
                     )}
                     label={(
@@ -807,19 +872,21 @@ function Contact(props) {
                 }
               </Grid>
 
-              <Grid item xs={6}>
-                <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block' }}>
-                  How much funding are you looking to raise?
+              <Grid item xs={8}>
+                <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_rates == '' ? 'red' : 'black'}` }}>
+                  How much funding are you looking to raise? *
                 </span>
+                <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: `${formikHook && query.investment_rates == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
+
                 <RadioGroup name="investment_rates" selectedValue={values.investment_rates} onChange={handleRadioChange("investment_rates")}>
-                  <div style={{ marginTop: '5px' }}><Radio value="25K" /> $25,000-$100,000</div>
-                  <div style={{ marginTop: '10px' }}><Radio value="100K" /> $100,000-$500,000</div>
-                  <div style={{ marginTop: '10px' }}><Radio value="500K" /> $500,000-$1,000,000</div>
-                  <div style={{ marginTop: '10px' }}><Radio value="1M" /> Above $1M</div>
+                  <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="25K" id="1_25K" /> <label for="1_25K">$25,000-$100,000</label></div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="100K" id="1_100k" /> <label for="1_100k">$100,000-$500,000</label></div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="500K" id="1_500k" /> <label for="1_500k">$500,000-$1,000,000</label></div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="1M" id="1_1M" /> <label for="1_1M">Above $1M</label></div>
                 </RadioGroup>
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <div style={{ paddingTop: '5px' }}>
                   <StarRatings
                     rating={query.investment_rates}
@@ -827,7 +894,7 @@ function Contact(props) {
                     changeRating={handleRatings}
                     numberOfStars={5}
                     name='investment_rates'
-                    starDimension={"30px"}
+                    starDimension={"25px"}
                   />
                 </div>
               </Grid>
@@ -837,17 +904,19 @@ function Contact(props) {
                   What is the total amount you / your group currently have raised?
                 </span>
                 <RadioGroup name="previous_investment_rates" selectedValue={values.previous_investment_rates} onChange={handleRadioChange("previous_investment_rates")}>
-                  <div style={{ marginTop: '5px' }}><Radio value="25K" /> $25,000-$100,000</div>
-                  <div style={{ marginTop: '10px' }}><Radio value="100K" /> $100,000-$500,000</div>
-                  <div style={{ marginTop: '10px' }}><Radio value="500K" /> $500,000-$1,000,000</div>
-                  <div style={{ marginTop: '10px' }}><Radio value="1M" /> Above $1M</div>
+                  <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="25K" id="2_25K" /> <label for="2_25K">$25,000-$100,000</label></div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="100K" id="2_100k" /> <label for="2_100k">$100,000-$500,000</label></div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="500K" id="2_500k" /> <label for="2_500k">$500,000-$1,000,000</label></div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="1M" id="2_1M" /> <label for="2_1M">Above $1M</label></div>
                 </RadioGroup>
               </Grid>
 
 
-              <Grid item xs={6}>
-                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
+              <Grid item xs={8}>
+                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_category.length == 0 ? 'red' : 'black'}` }}>
                   Which industry best describes your startup positioned to disrupt?
+                  <span style={{ display: 'block' }}>(Please select ALL that apply.)</span>
+                  <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: `${formikHook && query.investment_category == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
                 </span>
 
                 {all.investment_category.map(category =>
@@ -858,7 +927,7 @@ function Contact(props) {
                         checked={category.checked}
                         value={category.value}
                         onChange={() => handleCheckBoxesSelect("investment_category", all.investment_category, category.id)}
-                        color="primary"
+                        color="black"
                       />
                     )}
                     label={(
@@ -871,7 +940,7 @@ function Contact(props) {
                 }
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <div style={{ paddingTop: '15px' }}>
                   <StarRatings
                     rating={query.investment_category}
@@ -879,7 +948,7 @@ function Contact(props) {
                     changeRating={handleRatings}
                     numberOfStars={5}
                     name='investment_category'
-                    starDimension={"30px"}
+                    starDimension={"25px"}
                   />
                 </div>
               </Grid>
@@ -897,7 +966,7 @@ function Contact(props) {
                         checked={industry.checked}
                         value={industry.value}
                         onChange={() => handleCheckBoxesSelect("investment_industry", all.investment_industry, industry.id)}
-                        color="primary"
+                        color="black"
                       />
                     )}
                     label={(
@@ -910,9 +979,11 @@ function Contact(props) {
                 }
               </Grid>
 
-              <Grid item xs={6}>
-                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
-                  Which emerging technology best describes your startup?
+              <Grid item xs={8}>
+                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.emerging_technologies.length == 0 ? 'red' : 'black'}` }}>
+                  Which emerging technology best describes your startup? *
+                  <span style={{ display: 'block' }}>(Please select ALL that apply.)</span>
+                  <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: 'black', color: `${formikHook && query.emerging_technologies == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
                 </span>
 
                 {all.emerging_technologies.map(technology =>
@@ -923,7 +994,7 @@ function Contact(props) {
                         checked={technology.checked}
                         value={technology.value}
                         onChange={() => handleCheckBoxesSelect("emerging_technologies", all.emerging_technologies, technology.id)}
-                        color="primary"
+                        color="black"
                       />
                     )}
                     label={(
@@ -936,7 +1007,7 @@ function Contact(props) {
                 }
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <div style={{ paddingTop: '15px' }}>
                   <StarRatings
                     rating={query.emerging_technologies}
@@ -944,7 +1015,7 @@ function Contact(props) {
                     changeRating={handleRatings}
                     numberOfStars={5}
                     name='emerging_technologies'
-                    starDimension={"30px"}
+                    starDimension={"25px"}
                   />
                 </div>
               </Grid>
@@ -962,7 +1033,7 @@ function Contact(props) {
                         checked={technology.checked}
                         value={technology.value}
                         onChange={() => handleCheckBoxesSelect("previous_emerging_technologies", all.previous_emerging_technologies, technology.id)}
-                        color="primary"
+                        color="black"
                       />
                     )}
                     label={(
@@ -1022,12 +1093,7 @@ function Contact(props) {
             </Grid>
             <div style={{ marginTop: '50px' }} className={classes.btnArea}>
               <Button disabled={loading} style={{ margin: 'auto' }} variant="outlined" type="submit" color="primary" size="large">
-                Save Record
-              </Button>
-
-              <Button disabled={loading} style={{ margin: 'auto' }} onClick={handleInvestorSuggestion} variant="outlined" type="submit" color="primary" size="large">
                 Suggest Investors
-                {/* <SendIcon className={classes.rightIcon} /> */}
               </Button>
             </div>
           </ValidatorForm>
