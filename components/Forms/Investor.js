@@ -866,7 +866,7 @@ function Contact(props) {
                 <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: `${formikHook && query.investment_rates == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
 
                 <RadioGroup name="investment_rates" selectedValue={values.investment_rates} onChange={handleRadioChange("investment_rates")}>
-                  <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="25K" id="1_25K" /><label for="1_25K">$25,000-$100,000</label></div>
+                  <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="25K" id="1_25K" /> <label for="1_25K">$25,000-$100,000</label></div>
                   <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="100K" id="1_100k" /> <label for="1_100k">$100,000-$500,000</label></div>
                   <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="500K" id="1_500k" /> <label for="1_500k">$500,000-$1,000,000</label></div>
                   <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="1M" id="1_1M" /> <label for="1_1M">Above $1M</label></div>
