@@ -798,7 +798,7 @@ function Contact(props) {
 
               <Grid item xs={8}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_stages.length == 0 ? 'red' : 'black'}` }}>
-                  What stage would you like to invest in?
+                  What stage would you like to invest in? *
                   <span style={{ display: 'block' }}>(Please select ALL that apply.)</span>
                   <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: 'black', color: `${formikHook && query.investment_stages == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
                 </span>
@@ -865,15 +865,15 @@ function Contact(props) {
 
               <Grid item xs={8}>
                 <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_rates == '' ? 'red' : 'black'}` }}>
-                  How much are you looking to invest in a given deal?
+                  How much are you looking to invest in a given deal? *
                 </span>
                 <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: `${formikHook && query.investment_rates == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
 
                 <RadioGroup name="investment_rates" selectedValue={values.investment_rates} onChange={handleRadioChange("investment_rates")}>
-                  <div style={{ marginTop: '15px' }}><Radio value="25K" /> $25,000-$100,000</div>
-                  <div style={{ marginTop: '10px' }}><Radio value="100K" /> $100,000-$500,000</div>
-                  <div style={{ marginTop: '10px' }}><Radio value="500K" /> $500,000-$1,000,000</div>
-                  <div style={{ marginTop: '10px' }}><Radio value="1M" /> Above $1M</div>
+                  <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="25K" /> $25,000-$100,000</div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="100K" /> $100,000-$500,000</div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="500K" /> $500,000-$1,000,000</div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="1M" /> Above $1M</div>
                 </RadioGroup>
               </Grid>
 
@@ -892,7 +892,7 @@ function Contact(props) {
 
               <Grid style={{ paddingRight: '0px' }} item xs={8}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_category.length == 0 ? 'red' : 'black'}` }}>
-                  Which category would you be interested to invest in?
+                  Which category would you be interested to invest in? *
                   <span style={{ display: 'block' }}>(Please select ALL that apply.)</span>
                   <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: `${formikHook && query.investment_category == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
                 </span>
@@ -959,7 +959,7 @@ function Contact(props) {
 
               <Grid style={{ paddingRight: '0px' }} item xs={8}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.emerging_technologies.length == 0 ? 'red' : 'black'}` }}>
-                  Which emerging technology trend are you most interested in?
+                  Which emerging technology trend are you most interested in? *
                   <span style={{ display: 'block' }}>(Please select ALL that apply.)</span>
                   <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: 'black', color: `${formikHook && query.emerging_technologies == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
                 </span>
