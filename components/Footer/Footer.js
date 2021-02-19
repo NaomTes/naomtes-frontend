@@ -99,10 +99,125 @@ function Footer(props) {
         <Typography style={{ textAlign: 'center', margin: '40px 40px' }} className={clsx(title.default, text.subtitle)} variant="h4">
           VC Connector provides direct access to investors without the need to incur expensive travel cost associated with in-person meetings.
         </Typography>
-        <Typography style={{ textAlign: 'center' }} className={clsx(title.default, text.subtitle)} variant="h4">
+        <Typography style={{ textAlign: 'center', marginBottom: '100px' }} className={clsx(title.default, text.subtitle)} variant="h4">
           Register to our platform and let us pre-select VCs that would support and potentially invest in your startup ideas.
         </Typography>
       </Grid>
+
+      <Grid container spacing={4}>
+        <Grid item xs={12} md={3}>
+          <div className={classes.logo}>
+            <img src={logo} alt="logo" />
+            <Typography variant="h6" color="textPrimary">
+              {brand.agency.projectName}
+            </Typography>
+          </div>
+          <Typography color="textPrimary" className={classes.footerDesc} gutterBottom>
+            {t('common:agency-landing.footer_paragraph')}
+          </Typography>
+          {isDesktop && <Copyright />}
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Grid container spacing={4} justify="space-evenly">
+            {footers.map(footer => (
+              <Grid item xs={12} md={3} key={footer.title} className={classes.siteMapItem}>
+                {isDesktop && (
+                  <div>
+                    <Typography variant="h6" className={classes.title} color="textPrimary" gutterBottom>
+                      {footer.title}
+                    </Typography>
+                    <ul>
+                      {footer.description.map((item, index) => (
+                        <li key={item}>
+                          <Link href={footer.link[index]} variant="subtitle1" color="textSecondary">
+                            {item}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {isMobile && (
+                  <ExpansionPanel
+                    square
+                    classes={{
+                      root: classes.accordionRoot,
+                    }}
+                  >
+                    <ExpansionPanelSummary
+                      expandIcon={<ExpandMoreIcon className={classes.accordionIcon} />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                      classes={{
+                        content: classes.accordionContent,
+                      }}
+                    >
+                      <strong>
+                        {footer.title}
+                      </strong>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                      <ul>
+                        {footer.description.map((item, index) => (
+                          <li key={item}>
+                            <Link href={footer.link[index]} variant="subtitle1" color="textSecondary">
+                              {item}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </ExpansionPanelDetails>
+                  </ExpansionPanel>
+                )}
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <div className={classes.socmed}>
+            <IconButton aria-label="FB" className={classes.margin} size="small">
+              <i className="ion-social-twitter" />
+            </IconButton>
+            <IconButton aria-label="TW" className={classes.margin} size="small">
+              <i className="ion-social-facebook" />
+            </IconButton>
+            <IconButton aria-label="IG" className={classes.margin} size="small">
+              <i className="ion-social-instagram" />
+            </IconButton>
+            <IconButton aria-label="LI" className={classes.margin} size="small">
+              <i className="ion-social-linkedin" />
+            </IconButton>
+          </div>
+          <Select
+            value={values.lang}
+            onChange={handleChange}
+            MenuProps={{
+              container: ctn
+            }}
+            startAdornment={(
+              <InputAdornment className={classes.icon} position="start">
+                <LangIcon />
+              </InputAdornment>
+            )}
+            className={classes.selectLang}
+            input={<OutlinedInput labelWidth={200} name="lang" id="outlined-lang-simple" />}
+          >
+            <MenuItem value="en">English</MenuItem>
+            <MenuItem value="de">Deutsch</MenuItem>
+            <MenuItem value="ar">العربيّة</MenuItem>
+            <MenuItem value="id">Bahasa Indonesia</MenuItem>
+            <MenuItem value="pt">Português</MenuItem>
+            <MenuItem value="zh">简体中文</MenuItem>
+          </Select>
+        </Grid>
+      </Grid>
+      {isMobile && (
+        <div className={align.textCenter}>
+          <Box p={4}>
+            <Copyright />
+          </Box>
+        </div>
+      )}
     </Container>
   );
 }

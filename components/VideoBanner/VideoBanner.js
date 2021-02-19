@@ -120,7 +120,7 @@ function VideoBanner(props) {
                 <div className={classes.videoFigure}>
                   <div className={classes.innerFigure}>
                     <Hidden mdDown>
-                      {play && (
+                      {false && (
                         <IconButton
                           className={classes.btnPlay}
                           onClick={_onTogglePause}
@@ -129,9 +129,9 @@ function VideoBanner(props) {
                         </IconButton>
                       )}
                     </Hidden>
-                    {!play || isMobile ? <img src={imgApi.agency[0]} alt="cover" /> : null}
+                    {true || isMobile ? <img src={imgApi.agency[0]} alt="cover" /> : null}
                     <div className={classes.overlay} />
-                    {yt.use && (
+                    {false && (
                       <div className={classes.video}>
                         <Hidden mdDown>
                           <YouTube

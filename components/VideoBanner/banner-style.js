@@ -119,7 +119,7 @@ const useStyles = makeStyles(theme => ({
     top: 0,
     left: 0,
     background: theme.palette.common.black,
-    opacity: 0.6,
+    opacity: 0.2,
     width: '100%',
     height: '100%',
     zIndex: 10
@@ -142,6 +142,7 @@ const useStyles = makeStyles(theme => ({
     '& img': {
       display: 'block',
       width: '100%',
+      height: '90%',
       zIndex: 2,
       position: 'relative'
     },
