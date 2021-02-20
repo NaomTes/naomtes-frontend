@@ -708,14 +708,14 @@ function Contact(props) {
           </a>
         </div>
       </Hidden>
-      <Hidden smDown>
+      {/* <Hidden smDown>
         <IconButton href={routeLink.agency.home} className={classes.backtohome}>
           <i className="ion-ios-home-outline" />
           <i className="ion-ios-arrow-thin-left" />
         </IconButton>
-      </Hidden>
+      </Hidden> */}
       <Container maxWidth="md">
-        <Typography variant="h3" gutterBottom className={text.title}>
+        <Typography style={{ paddingTop: '40px' }} variant="h3" gutterBottom className={text.title}>
           {/* {t('common:contact_title')} */}
           Investor Information
         </Typography>

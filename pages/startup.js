@@ -4,8 +4,11 @@ import brand from '~/public/text/brand';
 import StartupForm from '../components/Forms/Startup';
 import Decoration from '../components/Forms/Decoration';
 import { withTranslation } from '../i18n';
+import Header from '../components/Header/HeaderOther';
 
-function Startup() {
+
+function Startup(props) {
+  const { onToggleDark, onToggleDir } = props;
   return (
     <Fragment>
       <Head>
@@ -15,6 +18,10 @@ function Startup() {
         </title>
       </Head>
       <div>
+        <Header
+          onToggleDark={onToggleDark}
+          onToggleDir={onToggleDir}
+        />
         <Decoration />
         <StartupForm />
       </div>

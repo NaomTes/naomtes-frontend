@@ -108,10 +108,15 @@ function VideoBanner(props) {
               <Typography className={clsx(classes.subtitle, text.subtitle)} variant="h5">
                 {t('common:agency-landing.banner_subtitle')}
               </Typography>
-              <Button href="/contact" variant="outlined" size="large" color="secondary" className={classes.button}>
+              <Button style={{ marginTop: '50px' }} href="/contact" variant="outlined" size="large" color="secondary" className={classes.button}>
                 {t('common:agency-landing.banner_button')}
                 <SendIcon className={classes.icon} />
               </Button>
+              <Typography style={{ marginTop: '20px' }} className={clsx(classes.subtitle, text.subtitle)} variant="h6">
+                We'd like to hear from you!
+                 <br />
+                <span style={{ fontSize: '20px' }}>Let us know what you would like to chat about below.</span>
+              </Typography>
             </div>
           </Grid>
           {isTablet && (

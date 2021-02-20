@@ -74,19 +74,17 @@ function Contact(props) {
           </a>
         </div>
       </Hidden>
-      <Hidden smDown>
+      {/* <Hidden smDown>
         <IconButton href={routeLink.agency.home} className={classes.backtohome}>
           <i className="ion-ios-home-outline" />
           <i className="ion-ios-arrow-thin-left" />
         </IconButton>
-      </Hidden>
+      </Hidden> */}
       <Container maxWidth="md">
-        <Typography variant="h3" gutterBottom className={text.title}>
-          {t('common:contact_title')}
+        <Typography style={{ paddingTop: '40px' }} variant="h3" gutterBottom className={text.title}>
+          Register for Update
         </Typography>
-        <Typography className={clsx(classes.desc, text.subtitle2)}>
-          {t('common:contact_subtitle')}
-        </Typography>
+
         <div className={classes.form}>
           <ValidatorForm
             onSubmit={handleSubmit}
@@ -96,7 +94,7 @@ function Contact(props) {
               <Grid item sm={6} xs={12}>
                 <TextValidator
                   className={classes.input}
-                  label={t('common:form_name')}
+                  label={t('Name')}
                   onChange={handleChange('name')}
                   name="Name"
                   value={values.name}
@@ -107,7 +105,7 @@ function Contact(props) {
               <Grid item sm={6} xs={12}>
                 <TextValidator
                   className={classes.input}
-                  label={t('common:form_email')}
+                  label={t('Email')}
                   onChange={handleChange('email')}
                   name="Email"
                   value={values.email}
@@ -118,7 +116,7 @@ function Contact(props) {
               <Grid item sm={6} xs={12}>
                 <TextValidator
                   className={classes.input}
-                  label={t('common:form_phone')}
+                  label={t('Phone Number')}
                   onChange={handleChange('phone')}
                   name="Phone"
                   value={values.phone}
@@ -127,7 +125,7 @@ function Contact(props) {
               <Grid item sm={6} xs={12}>
                 <TextValidator
                   className={classes.input}
-                  label={t('common:form_company')}
+                  label={'Company'}
                   onChange={handleChange('company')}
                   name="Company"
                   value={values.company}

@@ -43,7 +43,7 @@ const footers = [
   },
   {
     title: 'Resources',
-    description: ['Resource', 'Resource name', 'Another resource', 'Final resource'],
+    description: ['Resource'],
     link: ['#resource', '#resource-name', '#another-resource', '#final-resource'],
   },
   {
@@ -101,6 +101,15 @@ function Footer(props) {
         </Typography>
         <Typography style={{ textAlign: 'center', marginBottom: '100px' }} className={clsx(title.default, text.subtitle)} variant="h4">
           Register to our platform and let us pre-select VCs that would support and potentially invest in your startup ideas.
+        </Typography>
+      </Grid>
+
+      <Grid style={{ marginTop: '80px', marginBottom: '80px' }} item xs={12}>
+        <Typography style={{ textAlign: 'center' }} className={clsx(title.default, text.subtitle)} variant="h4">
+          What We Do ?
+        </Typography>
+        <Typography style={{ textAlign: 'center' }} className={clsx(title.default, text.subtitle)} variant="h4">
+          <span style={{}}>We work with Underrepresented women and founders of color who do not have fair and equitable access to VCs.</span>
         </Typography>
       </Grid>
 

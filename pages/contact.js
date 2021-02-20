@@ -4,17 +4,24 @@ import brand from '~/public/text/brand';
 import ContactFrm from '../components/Forms/Contact';
 import Decoration from '../components/Forms/Decoration';
 import { withTranslation } from '../i18n';
+import Header from '../components/Header/HeaderOther';
 
-function Contact() {
+function Contact(props) {
+  const { onToggleDark, onToggleDir } = props;
+
   return (
     <Fragment>
       <Head>
         <title>
-          { brand.agency.name }
+          {brand.agency.name}
           &nbsp; - Contact
         </title>
       </Head>
       <div>
+        <Header
+          onToggleDark={onToggleDark}
+          onToggleDir={onToggleDir}
+        />
         <Decoration />
         <ContactFrm />
       </div>

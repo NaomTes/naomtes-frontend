@@ -4,8 +4,11 @@ import brand from '~/public/text/brand';
 import InvestorForm from '../components/Forms/Investor';
 import Decoration from '../components/Forms/Decoration';
 import { withTranslation } from '../i18n';
+import Header from '../components/Header/HeaderOther';
 
-function Investor() {
+
+function Investor(props) {
+  const { onToggleDark, onToggleDir } = props;
   return (
     <Fragment>
       <Head>
@@ -15,6 +18,10 @@ function Investor() {
         </title>
       </Head>
       <div>
+        <Header
+          onToggleDark={onToggleDark}
+          onToggleDir={onToggleDir}
+        />
         <Decoration />
         <InvestorForm />
       </div>
