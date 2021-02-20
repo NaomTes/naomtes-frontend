@@ -496,7 +496,7 @@ function Contact(props) {
       }
     }
 
-    if (values.investment_stages.length == 0 || values.investment_category.length == 0 || values.emerging_technologies.length == 0) {
+    if (values.investment_stages.length == 0 || values.investment_category.length == 0 || values.emerging_technologies.length == 0 || values.last_investment_stages.length == 0 || values.previous_emerging_technologies.length == 0 || values.investment_industry.length == 0) {
       setNotif(true);
       setNotificationMsg("Please fill out the missing fields!")
       return true
@@ -881,8 +881,8 @@ function Contact(props) {
               </Grid>
 
               <Grid style={{ paddingTop: '0px' }} item xs={12}>
-                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
-                  What was the last equity investment round you invested?
+                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.last_investment_stages.length == 0 ? 'red' : 'black'}` }}>
+                  What was the last equity investment round you invested? *
                 </span>
 
                 {all.last_investment_stages.map(stage =>
@@ -976,8 +976,8 @@ function Contact(props) {
               </Grid>
 
               <Grid item xs={12}>
-                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
-                  Previous investment Industry? (Please select ALL that apply.)
+                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_industry.length == 0 ? 'red' : 'black'}` }}>
+                  Previous investment Industry? (Please select ALL that apply.) *
                 </span>
 
                 {all.investment_industry.map(industry =>
@@ -1044,8 +1044,8 @@ function Contact(props) {
               </Grid>
 
               <Grid item xs={12}>
-                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
-                  Have you previously invested in the following emerging technologies? (Please select ALL that apply.)
+                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.previous_emerging_technologies.length == 0 ? 'red' : 'black'}` }}>
+                  Have you previously invested in the following emerging technologies? (Please select ALL that apply)*
                 </span>
 
                 {all.previous_emerging_technologies.map(technology =>

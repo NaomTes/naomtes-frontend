@@ -143,6 +143,7 @@ const useStyles = makeStyles(theme => ({
       display: 'block',
       width: '100%',
       height: '90%',
+      resizeMode: 'center',
       zIndex: 2,
       position: 'relative'
     },

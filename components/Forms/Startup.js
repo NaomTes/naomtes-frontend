@@ -506,13 +506,13 @@ function Contact(props) {
       }
     }
 
-    if (values.investment_stages.length == 0 || values.investment_category.length == 0 || values.emerging_technologies.length == 0) {
+    if (values.investment_stages.length == 0 || values.investment_category.length == 0 || values.emerging_technologies.length == 0 || values.last_investment_stages.length == 0 || values.previous_emerging_technologies.length == 0 || values.investment_industry.length == 0) {
       setNotif(true);
       setNotificationMsg("Please fill out the missing fields!")
       return true
     }
 
-    if (values.investment_rates == "") {
+    if (values.investment_rates == "" || values.previous_investment_rates == "") {
       setNotif(true);
       setNotificationMsg("Please fill out the missing fields!")
       return true
@@ -888,8 +888,8 @@ function Contact(props) {
               </Grid>
 
               <Grid item xs={12}>
-                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
-                  What was the last type of funding you raised?
+                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.last_investment_stages.length == 0 ? 'red' : 'black'}` }}>
+                  What was the last type of funding you raised?*
                 </span>
 
                 {all.last_investment_stages.map(stage =>
@@ -942,8 +942,8 @@ function Contact(props) {
               </Grid>
 
               <Grid item xs={12}>
-                <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block' }}>
-                  What is the total amount you / your group currently have raised?
+                <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block', color: `${formikHook && values.previous_investment_rates == '' ? 'red' : 'black'}` }}>
+                  What is the total amount you / your group currently have raised? *
                 </span>
                 <RadioGroup name="previous_investment_rates" selectedValue={values.previous_investment_rates} onChange={handleRadioChange("previous_investment_rates")}>
                   <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="25K" id="2_25K" /> <label for="2_25K">$25,000-$100,000</label></div>
@@ -995,8 +995,8 @@ function Contact(props) {
               </Grid>
 
               <Grid item xs={12}>
-                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
-                  Previous startups Industry? Select ALL that applies.
+                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_industry.length == 0 ? 'red' : 'black'}` }}>
+                  Previous startups Industry? Select ALL that applies. *
                 </span>
 
                 {all.investment_industry.map(industry =>
@@ -1062,8 +1062,8 @@ function Contact(props) {
               </Grid>
 
               <Grid item xs={12}>
-                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
-                  Have you previously founded companies in the following emerging technologies? Select ALL that applies.
+                <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.previous_emerging_technologies.length == 0 ? 'red' : 'black'}` }}>
+                  Have you previously founded companies in the following emerging technologies? Select ALL that applies. *
                 </span>
 
                 {all.previous_emerging_technologies.map(technology =>

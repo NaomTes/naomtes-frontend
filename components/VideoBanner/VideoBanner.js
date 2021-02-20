@@ -18,6 +18,7 @@ import { withTranslation } from '~/i18n';
 import imgApi from '~/public/images/imgAPI';
 import yt from '~/youtube';
 import useStyles from './banner-style';
+import ys from '../../public/images/ys.png'
 
 function VideoBanner(props) {
   // Theme breakpoints
@@ -134,7 +135,7 @@ function VideoBanner(props) {
                         </IconButton>
                       )}
                     </Hidden>
-                    {true || isMobile ? <img src={imgApi.agency[0]} alt="cover" /> : null}
+                    {true || isMobile ? <img src={ys} alt="cover" /> : null}
                     <div className={classes.overlay} />
                     {false && (
                       <div className={classes.video}>
