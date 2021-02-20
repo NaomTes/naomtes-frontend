@@ -662,7 +662,7 @@ function Contact(props) {
             {
               response?.map((item, index) =>
                 <div key={index}>
-                  <input type="checkbox" name="startup_selected" onChange={handleInvestorChange} value={`${item.id}`} id={`top_${item.id}`} />
+                  <input type="checkbox" name="investor_selected" onChange={handleInvestorChange} value={`${item.id}`} id={`top_${item.id}`} />
                   <label for={`top_${item.id}`} style={{ marginTop: '20px', marginLeft: '15px', display: 'inline-block', fontSize: '16px', fontWeight: 'bold', marginBottom: '5px' }}>{`${item.investor_name} (${item.match_score}%)`}</label>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <label style={{ fontSize: '16px', marginBottom: '5px' }}>{`Phone: `}<b>{`${item.phone_number}`}</b></label>
