@@ -425,10 +425,16 @@ function Contact(props) {
 
   const defaultQuery = {
     // Manual Ratings
-    investment_stages: 1,
-    investment_category: 1,
-    emerging_technologies: 1,
-    investment_rates: 1
+    investment_stages: 5, // 1 -> being highest
+    investment_category: 5,
+    investment_rates: 5,// 1 -> being highest
+    emerging_technologies: 4,
+
+    investment_industry: 4,
+    previous_emerging_technologies: 4,
+
+    country: 5,
+
   }
 
   const [query, setQuery] = useState(defaultQuery)
@@ -552,9 +558,15 @@ function Contact(props) {
 
     setLoading(true)
 
+    let queryPayload = JSON.parse(JSON.stringify(query))
+
+    if (values.country == "united_states_of_america") {
+      queryPayload.state = 5
+    }
+
     startupSuggestion({
       investor: values,
-      ratings: query
+      ratings: queryPayload
     })
       .then(({ results }) => {
 
@@ -661,12 +673,11 @@ function Contact(props) {
                     <label />
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <label style={{ fontSize: '16px', marginBottom: '5px' }}>{`Investor Type: `}<b>{`${item.investor_type}`}</b></label>
-                    <label style={{ fontSize: '16px', marginBottom: '5px' }}>{`Product and Value Preposition: `}<b>{`${item.value_preposition}`}</b></label>
+                    <label style={{ fontSize: '16px', marginBottom: '5px' }}>{`Summary: `}<b>{`${item.value_preposition}`}</b></label>
                     <label />
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <label style={{ fontSize: '16px', marginBottom: '5px' }}>{`Website: `}<a href={item.website} target="_blank" >{item.website}</a></label>
+                    <label style={{ fontSize: '16px', marginBottom: '5px' }}>{`URL: `}<a href={item.website} target="_blank" >{item.website}</a></label>
                   </div>
                   <div style={{ width: '100%', marginBottom: '30px' }}>
                     <Progress completed={item.match_score} />
@@ -688,7 +699,7 @@ function Contact(props) {
             Back
         </Button>
         </Modal2.Body>
-      </Modal2>
+      </Modal2 >
 
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -717,7 +728,7 @@ function Contact(props) {
       <Container maxWidth="md">
         <Typography style={{ paddingTop: '40px' }} variant="h3" gutterBottom className={text.title}>
           {/* {t('common:contact_title')} */}
-          Investor Information
+          Investors
         </Typography>
         <div className={classes.form}>
           <ValidatorForm

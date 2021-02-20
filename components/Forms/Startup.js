@@ -431,10 +431,16 @@ function Contact(props) {
 
   const defaultQuery = {
     // Manual Ratings
-    investment_stages: 1,
-    investment_category: 1,
-    emerging_technologies: 1,
-    investment_rates: 1
+    investment_stages: 5,
+    investment_category: 5,
+    emerging_technologies: 5,
+    investment_rates: 5,
+
+    investment_industry: 4,
+    last_investment_stages: 5,
+
+    country: 5,
+    state: 5
   }
 
   const [query, setQuery] = useState(defaultQuery)
@@ -601,9 +607,15 @@ function Contact(props) {
 
     setLoading(true)
 
+    let queryPayload = JSON.parse(JSON.stringify(query))
+
+    if (values.country == "united_states_of_america") {
+      queryPayload.state = 5
+    }
+
     investorSuggestion({
       startup: values,
-      ratings: query
+      ratings: queryPayload
     })
       .then(({ results }) => {
         setValues({ ...values, investor_selected: [] })
@@ -721,7 +733,7 @@ function Contact(props) {
       <Container maxWidth="md">
         <Typography style={{ paddingTop: '40px' }} variant="h3" gutterBottom className={text.title}>
           {/* {t('common:contact_title')} */}
-          Startup Information
+          Startup
         </Typography>
         <div className={classes.form}>
           <ValidatorForm
@@ -787,7 +799,7 @@ function Contact(props) {
               <Grid item xs={12}>
                 <TextValidator
                   className={classes.input}
-                  label={"Website"}
+                  label={"URL"}
                   onChange={handleChange('website')}
                   name="website"
                   value={values.website}
@@ -1051,7 +1063,7 @@ function Contact(props) {
 
               <Grid item xs={12}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block' }}>
-                  Have you previously founded comapanies in the following emerging technologies? Select ALL that applies.
+                  Have you previously founded companies in the following emerging technologies? Select ALL that applies.
                 </span>
 
                 {all.previous_emerging_technologies.map(technology =>
@@ -1095,7 +1107,7 @@ function Contact(props) {
               <Grid item xs={12}>
                 <TextValidator
                   className={classes.input}
-                  label={"Describe your product and value proposition."}
+                  label={"Describe your product and value proposition. Describe your startup in 3-4 sentences."}
                   onChange={handleChange('value_preposition')}
                   name="value_preposition"
                   value={values.value_preposition}
