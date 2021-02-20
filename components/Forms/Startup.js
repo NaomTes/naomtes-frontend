@@ -436,11 +436,12 @@ function Contact(props) {
     emerging_technologies: 5,
     investment_rates: 5,
 
-    investment_industry: 4,
     last_investment_stages: 5,
+    // previous_investment_rates: 5, because no field at investor
 
-    country: 5,
-    state: 5
+    investment_industry: 3,
+    previous_emerging_technologies: 3,
+    country: 5
   }
 
   const [query, setQuery] = useState(defaultQuery)

@@ -424,15 +424,14 @@ function Contact(props) {
 
 
   const defaultQuery = {
-    // Manual Ratings
-    investment_stages: 5, // 1 -> being highest
+    investment_stages: 5,
     investment_category: 5,
-    investment_rates: 5,// 1 -> being highest
-    emerging_technologies: 4,
+    investment_rates: 5,
+    emerging_technologies: 3,
 
-    investment_industry: 4,
-    previous_emerging_technologies: 4,
-
+    investment_industry: 3,
+    previous_emerging_technologies: 3,
+    last_investment_stages: 3,
     country: 5,
 
   }
