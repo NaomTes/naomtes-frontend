@@ -358,14 +358,18 @@ function Contact(props) {
     investment_stages: [
       { id: 1, value: 'pre_seeding_investing', checked: false, label: 'Pre-seed Investing' },
       { id: 2, value: 'seed_funding', checked: false, label: 'Seed Funding' },
-      { id: 3, value: 'series', checked: false, label: 'Series A/B/C' },
-      { id: 4, value: 'late_stage', checked: false, label: 'Late stage' }
+      { id: 3, value: 'seriesA', checked: false, label: 'Series A' },
+      { id: 4, value: 'seriesB', checked: false, label: 'Series B' },
+      { id: 5, value: 'seriesC', checked: false, label: 'Series C' },
+      { id: 6, value: 'late_stage', checked: false, label: 'Late stage' }
     ],
     last_investment_stages: [
       { id: 1, value: 'pre_seeding_investing', checked: false, label: 'Pre-seed Investing' },
       { id: 2, value: 'seed_funding', checked: false, label: 'Seed Funding' },
-      { id: 3, value: 'series', checked: false, label: 'Series A/B/C' },
-      { id: 4, value: 'late_stage', checked: false, label: 'Late stage' }
+      { id: 3, value: 'seriesA', checked: false, label: 'Series A' },
+      { id: 4, value: 'seriesB', checked: false, label: 'Series B' },
+      { id: 5, value: 'seriesC', checked: false, label: 'Series C' },
+      { id: 6, value: 'late_stage', checked: false, label: 'Late stage' }
     ],
     investment_category: [
       { id: 1, value: 'banking', checked: false, label: 'Banking' },
@@ -420,10 +424,11 @@ function Contact(props) {
 
 
   const defaultQuery = {
-    investment_stages: 0,
-    investment_category: 0,
-    emerging_technologies: 0,
-    investment_rates: 0
+    // Manual Ratings
+    investment_stages: 1,
+    investment_category: 1,
+    emerging_technologies: 1,
+    investment_rates: 1
   }
 
   const [query, setQuery] = useState(defaultQuery)
@@ -451,7 +456,7 @@ function Contact(props) {
     about_us: '',
 
 
-    startup_selected: ''
+    startup_selected: []
   }
 
   const [values, setValues] = useState(defaultObject);
@@ -500,7 +505,7 @@ function Contact(props) {
   }
 
   const handleSubmit = e => {
-    if (values.startup_selected == "") {
+    if (values.startup_selected.length == 0) {
       setNotif(true);
       setNotificationMsg("Select one startup!")
       return;
@@ -535,15 +540,15 @@ function Contact(props) {
     if (validationsFailed())
       return
 
-    let processedQuery = true;
-    Object.values(query).forEach(item => {
-      if (item == 0) processedQuery = false
-    })
-    if (!processedQuery) {
-      setNotif(true);
-      setNotificationMsg("Please fill out the missing fields!")
-      return
-    }
+    // let processedQuery = true;
+    // Object.values(query).forEach(item => {
+    //   if (item == 0) processedQuery = false
+    // })
+    // if (!processedQuery) {
+    //   setNotif(true);
+    //   setNotificationMsg("Please fill out the missing fields!")
+    //   return
+    // }
 
     setLoading(true)
 
@@ -553,7 +558,7 @@ function Contact(props) {
     })
       .then(({ results }) => {
 
-        setValues({ ...values, startup_selected: '' })
+        setValues({ ...values, startup_selected: [] })
 
         setModal(true)
         setResponse(results)
@@ -606,8 +611,24 @@ function Contact(props) {
     setValues({ ...values, [name]: filtered_array.map(item => item.value) })
   }
 
-  let handleRatings = (newRating, name) => {
-    setQuery({ ...query, [name]: newRating })
+  // let handleRatings = (newRating, name) => {
+  //   setQuery({ ...query, [name]: newRating + 1 })
+  // }
+
+  let handleStartupChange = (e) => {
+
+    if (e.target.checked) {
+      let acceptItemArray = [...values.startup_selected]
+      acceptItemArray.push(e.target.value)
+
+      setValues({ ...values, startup_selected: acceptItemArray })
+    }
+    else {
+      let rejectItemArray = [...values.startup_selected]
+      rejectItemArray = rejectItemArray.filter(item => item != e.target.value)
+
+      setValues({ ...values, startup_selected: rejectItemArray })
+    }
   }
 
   return (
@@ -629,24 +650,30 @@ function Contact(props) {
               : <h3 style={{ marginTop: '20px' }}>These are your potential startups matches</h3>
             }
 
-            {response && <RadioGroup name="startup_selected" selectedValue={values.startup_selected} onChange={handleRadioChange("startup_selected")}>
-              {
-                response?.map((item, index) =>
-                  <div key={index}>
-                    <Radio value={`${item.id}`} id={`top_${item.id}`} />
-                    <label for={`top_${item.id}`} style={{ marginTop: '20px', marginLeft: '15px', display: 'inline-block', fontSize: '16px', fontWeight: 'bold', marginBottom: '5px' }}>{`${item.company_name} (${item.match_score}%)`}</label>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <label style={{ fontSize: '16px', marginBottom: '5px' }}>{`Phone: `}<b>{`${item.phone_number}`}</b></label>
-                      <label style={{ fontSize: '16px', marginBottom: '5px' }}>{`Email: `}<b>{`${item.email}`}</b></label>
-                      <label />
-                    </div>
-                    <div style={{ width: '100%', marginBottom: '30px' }}>
-                      <Progress completed={item.match_score} />
-                    </div>
+            {
+              response?.map((item, index) =>
+                <div key={index}>
+                  <input type="checkbox" name="startup_selected" onChange={handleStartupChange} value={`${item.id}`} id={`top_${item.id}`} />
+                  <label for={`top_${item.id}`} style={{ marginTop: '20px', marginLeft: '15px', display: 'inline-block', fontSize: '16px', fontWeight: 'bold', marginBottom: '5px' }}>{`${item.company_name} (${item.match_score}%)`}</label>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <label style={{ fontSize: '16px', marginBottom: '5px' }}>{`Phone: `}<b>{`${item.phone_number}`}</b></label>
+                    <label style={{ fontSize: '16px', marginBottom: '5px' }}>{`Email: `}<b>{`${item.email}`}</b></label>
+                    <label />
                   </div>
-                )
-              }
-            </RadioGroup>}
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <label style={{ fontSize: '16px', marginBottom: '5px' }}>{`Investor Type: `}<b>{`${item.investor_type}`}</b></label>
+                    <label style={{ fontSize: '16px', marginBottom: '5px' }}>{`Product and Value Preposition: `}<b>{`${item.value_preposition}`}</b></label>
+                    <label />
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <label style={{ fontSize: '16px', marginBottom: '5px' }}>{`Website: `}<a href={item.website} target="_blank" >{item.website}</a></label>
+                  </div>
+                  <div style={{ width: '100%', marginBottom: '30px' }}>
+                    <Progress completed={item.match_score} />
+                  </div>
+                </div>
+              )
+            }
           </div>
 
           <Button onClick={() => {
@@ -727,9 +754,8 @@ function Contact(props) {
                   onChange={handleChange('phone_number')}
                   name="phone_number"
                   value={values.phone_number}
-                  type="number"
-                // validators={['matchRegexp:^[0-9]*$']}
-                // errorMessages={['Only numbers are allowed']}
+                  validators={['matchRegexp:^[+][0-9]*$']}
+                  errorMessages={['Only numbers are allowed']}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -802,18 +828,16 @@ function Contact(props) {
                 />
               </Grid>
 
-              <Grid item xd={12} md={8}>
+              <Grid item xd={12}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_stages.length == 0 ? 'red' : 'black'}` }}>
-                  What stage would you like to invest in? *
-                  <span style={{ display: 'block' }}>(Please select ALL that apply.)</span>
-                  <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: 'black', color: `${formikHook && query.investment_stages == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
+                  What stage would you like to invest in? (Please select ALL that apply.) *
                 </span>
               </Grid>
 
-              <Grid item xs={12} md={4}>
+              {/* <Grid item xs={12} md={4}>
                 <div style={{ paddingTop: '15px' }}>
                   <StarRatings
-                    rating={query.investment_stages}
+                    rating={query.investment_stages - 1}
                     starRatedColor="orange"
                     changeRating={handleRatings}
                     numberOfStars={5}
@@ -821,7 +845,7 @@ function Contact(props) {
                     starDimension={"25px"}
                   />
                 </div>
-              </Grid>
+              </Grid> */}
 
               <Grid style={{ paddingTop: '0px' }} item xs={12}>
                 {all.investment_stages.map(stage =>
@@ -871,17 +895,16 @@ function Contact(props) {
                 }
               </Grid>
 
-              <Grid item xs={12} md={8}>
+              <Grid item xs={12}>
                 <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_rates == '' ? 'red' : 'black'}` }}>
                   How much are you looking to invest in given deal?*
                 </span>
-                <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: `${formikHook && query.investment_rates == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
               </Grid>
 
-              <Grid item xs={12} md={4}>
+              {/* <Grid item xs={12} md={4}>
                 <div style={{ paddingTop: '5px' }}>
                   <StarRatings
-                    rating={query.investment_rates}
+                    rating={query.investment_rates - 1}
                     starRatedColor="orange"
                     changeRating={handleRatings}
                     numberOfStars={5}
@@ -889,7 +912,7 @@ function Contact(props) {
                     starDimension={"25px"}
                   />
                 </div>
-              </Grid>
+              </Grid> */}
 
               <Grid style={{ paddingTop: '0px' }} item xs={12}>
                 <RadioGroup name="investment_rates" selectedValue={values.investment_rates} onChange={handleRadioChange("investment_rates")}>
@@ -900,18 +923,16 @@ function Contact(props) {
                 </RadioGroup>
               </Grid>
 
-              <Grid style={{ paddingRight: '0px' }} item xs={12} md={8}>
+              <Grid style={{ paddingRight: '0px' }} item xs={12}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_category.length == 0 ? 'red' : 'black'}` }}>
-                  Which category would you be interested to invest in? *
-                  <span style={{ display: 'block' }}>(Please select ALL that apply.)</span>
-                  <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: `${formikHook && query.investment_category == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
+                  Which category would you be interested to invest in? (Please select ALL that apply.) *
                 </span>
               </Grid>
 
-              <Grid item xs={12} md={4}>
+              {/* <Grid item xs={12} md={4}>
                 <div style={{ paddingTop: '15px' }}>
                   <StarRatings
-                    rating={query.investment_category}
+                    rating={query.investment_category - 1}
                     starRatedColor="orange"
                     changeRating={handleRatings}
                     numberOfStars={5}
@@ -919,7 +940,7 @@ function Contact(props) {
                     starDimension={"25px"}
                   />
                 </div>
-              </Grid>
+              </Grid> */}
 
               <Grid style={{ paddingTop: '0px' }} item xs={12}>
                 {all.investment_category.map(category =>
@@ -969,18 +990,17 @@ function Contact(props) {
                 }
               </Grid>
 
-              <Grid style={{ paddingRight: '0px' }} item xs={12} md={8}>
+              <Grid style={{ paddingRight: '0px' }} item xs={12}>
+                {/* <Grid style={{ paddingRight: '0px' }} item xs={12} md={8}> */}
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.emerging_technologies.length == 0 ? 'red' : 'black'}` }}>
-                  Which emerging technology trend are you most interested in? *
-                  <span style={{ display: 'block' }}>(Please select ALL that apply.)</span>
-                  <span style={{ display: 'block', marginTop: '5px', fontWeight: 'bold', color: 'black', color: `${formikHook && query.emerging_technologies == 0 ? 'red' : 'black'}` }}>Please rate importance 1-5 **</span>
+                  Which emerging technology trend are you most interested in? (Please select ALL that apply.) *
                 </span>
               </Grid>
 
-              <Grid item xs={12} md={4}>
+              {/* <Grid item xs={12} md={4}>
                 <div style={{ paddingTop: '15px' }}>
                   <StarRatings
-                    rating={query.emerging_technologies}
+                    rating={query.emerging_technologies - 1}
                     starRatedColor="orange"
                     changeRating={handleRatings}
                     numberOfStars={5}
@@ -988,7 +1008,7 @@ function Contact(props) {
                     starDimension={"25px"}
                   />
                 </div>
-              </Grid>
+              </Grid> */}
 
               <Grid item xs={12}>
                 {all.emerging_technologies.map(technology =>
