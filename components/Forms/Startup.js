@@ -677,12 +677,13 @@ function Contact(props) {
                 <div key={index}>
                   <input type="checkbox" name="investor_selected" onChange={handleInvestorChange} value={`${item.id}`} id={`top_${item.id}`} />
                   <label for={`top_${item.id}`} style={{ marginTop: '20px', marginLeft: '15px', display: 'inline-block', fontSize: '16px', fontWeight: 'bold', marginBottom: '5px' }}>{`${item.investor_name} (${item.match_score}%)`}</label>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <label style={{ fontSize: '16px', marginBottom: '5px' }}>{`Phone: `}<b>{`${item.phone_number}`}</b></label>
+                  <div style={{ display: 'flex', width: '90%', justifyContent: 'space-between', flexDirection: 'row-reverse' }}>
                     <label style={{ fontSize: '16px', marginBottom: '5px' }}>{`Email: `}<b>{`${item.email}`}</b></label>
-                    <label />
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', width: '90%', justifyContent: 'space-between', flexDirection: 'row-reverse' }}>
+                    <label style={{ fontSize: '16px', marginBottom: '5px' }}>{`Phone: `}<b>{`${item.phone_number}`}</b></label>
+                  </div>
+                  <div style={{ display: 'flex', width: '90%', justifyContent: 'space-between', flexDirection: 'row-reverse' }}>
                     <label style={{ fontSize: '16px', marginBottom: '5px' }}>{`Website: `}<a href={item.website} target="_blank" >{item.website}</a></label>
                   </div>
                   <div style={{ width: '100%', marginBottom: '30px' }}>
