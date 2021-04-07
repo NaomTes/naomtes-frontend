@@ -567,20 +567,20 @@ function Contact(props) {
       investor: values,
       ratings: queryPayload
     })
-      .then(({ results }) => {
-
+      .then(results => {
         setValues({ ...values, startup_selected: [] })
 
-        setModal(true)
-        setResponse(results)
+        setModal(true);
+        setResponse(results.data.results);
         setNotif(true);
-        console.log(response)
-        setNotificationMsg("Results are processed!")
+        console.log(results);
+        console.log(`status is: ${results}`);
+        setNotificationMsg("Results are processed!");
 
       })
       .catch((errors) => {
         setNotif(true);
-        setNotificationMsg("Something Went Wrong!")
+        setNotificationMsg("Something Went Wrong!");
       })
       .finally(() => {
         setLoading(false)

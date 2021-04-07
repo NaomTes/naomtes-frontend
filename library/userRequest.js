@@ -11,31 +11,46 @@ const service = axios.create({
   },
 });
 
-// function isAuthError(error) {
-//     const { response } = error;
-//     return response && response.status === 401;
-// }
+function isAuthError(error) {
+    const { response } = error;
+    return response && response.status === 401;
+}
 
 service.interceptors.request.use((config) => {
-  const url = config.url.match(/\/$/) ? config.url : `${config.url}/`;
+  const token = localStorage.getItem('token');
+  const url   = config.url.match(/\/$/) ? config.url : `${config.url}/`;
+  if (token) {
+    return {
+      ...config,
+      url,
+      headers: {
+        ...config.headers,
+        Authorization: token,
+      },
+    };
+  }
+
   return {
-    ...config,
-    url,
-    headers: config.headers,
+      ...config,
+      url,
+      headers: config.headers,
   };
 });
 
 // Response Interceptor
 service.interceptors.response.use(
   (data) => {
-    if (data.headers['authorization']) {
-      localStorage.setItem('token', data.headers['authorization']);
-    }
     return data;
   },
   (error) => {
     if (!error) {
       return Promise.reject(new Error('There was an error.'));
+    }
+    if (isAuthError(error)) {
+      localStorage.setItem('token', null);
+      // removeTokens();
+      window.location.href = '/login';
+      return Promise.reject(new Error('Session expired!'));
     }
     if (axios.isCancel(error)) {
       return Promise.reject(error);

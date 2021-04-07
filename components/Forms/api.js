@@ -1,4 +1,5 @@
 import request from '../../library/request';
+import userRequest from '../../library/userRequest';
 
 export function createInvestor(data) {
   return request({
@@ -30,5 +31,21 @@ export function startupSuggestion(data) {
     url: 'startups/process_results',
     method: 'post',
     data,
+  })
+}
+
+export function adminLogin(data) {
+  return request({
+    url: 'user/sign_in',
+    method: 'post',
+    data
+  })
+}
+
+export function bulkUploadData(data) {
+  return userRequest({
+    url: 'admins/bulk_upload_data',
+    method: 'post',
+    data
   })
 }
