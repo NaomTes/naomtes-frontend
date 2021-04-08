@@ -569,12 +569,9 @@ function Contact(props) {
     })
       .then(results => {
         setValues({ ...values, startup_selected: [] })
-
         setModal(true);
         setResponse(results.data.results);
         setNotif(true);
-        console.log(results);
-        console.log(`status is: ${results}`);
         setNotificationMsg("Results are processed!");
 
       })

@@ -18,7 +18,6 @@ export function createStartup(data) {
 }
 
 export function investorSuggestion(data) {
-  console.log(data)
   return request({
     url: 'investors/process_results',
     method: 'post',

@@ -618,17 +618,15 @@ function Contact(props) {
       startup: values,
       ratings: queryPayload
     })
-      .then(({ results }) => {
+      .then(results => {
         setValues({ ...values, investor_selected: [] })
-
         setModal(true)
-        console.log(results)
-        setResponse(results)
+        setResponse(results.data.results)
         setNotif(true);
         setNotificationMsg("Results are processed!")
 
       })
-      .catch((errors) => {
+      .catch(errors => {
         setNotif(true);
         setNotificationMsg("Something Went Wrong!")
       })
