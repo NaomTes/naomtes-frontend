@@ -17,6 +17,7 @@ import logo from '~public/images/logo-agency.png';
 import { withTranslation } from '~/i18n';
 import Checkbox from './Checkbox';
 import useStyles from './form-style';
+import { contactUs } from './api';
 
 function Contact(props) {
   const { t } = props;
@@ -34,20 +35,20 @@ function Contact(props) {
     ValidatorForm.addValidationRule('isTruthy', value => value);
   });
 
+  const [notificationMsg, setNotificationMsg] = useState('');
   const [openNotif, setNotif] = useState(false);
-
-  const [check, setCheck] = useState(false);
 
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value });
   };
 
-  const handleCheck = event => {
-    setCheck(event.target.checked);
-  };
-
   const handleSubmit = () => {
-    setNotif(true);
+    contactUs({ contact_us: values })
+      .then(response => {
+        setNotif(true);
+        setNotificationMsg(response.data.message);
+      })
+    // setNotif(true);
   };
 
   const handleClose = () => {
@@ -65,7 +66,7 @@ function Contact(props) {
         ContentProps={{
           'aria-describedby': 'message-id',
         }}
-        message={<span id="message-id">Message Sent</span>}
+        message={notificationMsg}
       />
       <Hidden mdUp>
         <div className={clsx(classes.logo, classes.logoHeader)}>
@@ -144,27 +145,6 @@ function Contact(props) {
               </Grid>
             </Grid>
             <div className={classes.btnArea}>
-              <FormControlLabel
-                control={(
-                  <Checkbox
-                    validators={['isTruthy']}
-                    errorMessages="This field is required"
-                    checked={check}
-                    value={check}
-                    onChange={(e) => handleCheck(e)}
-                    color="primary"
-                  />
-                )}
-                label={(
-                  <span>
-                    {t('common:form_terms')}
-                    <br />
-                    <a href="#">
-                      {t('common:form_privacy')}
-                    </a>
-                  </span>
-                )}
-              />
               <Button variant="outlined" type="submit" color="primary" size="large">
                 {t('common:form_send')}
                 <SendIcon className={classes.rightIcon} />

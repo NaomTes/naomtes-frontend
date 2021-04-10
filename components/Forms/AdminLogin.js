@@ -23,7 +23,7 @@ import { adminLogin } from './api'
 function Contact(props) {
   useEffect(function() {
     const token = localStorage.getItem('token');
-    if (token) {
+    if (token && token != "null") {
       router.push('/en/admin/dashboard');
     }
   },[]);
