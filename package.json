@@ -18,6 +18,7 @@
 		"dev": "node index.js",
 		"build": "next build",
 		"start": "NODE_ENV=production node index.js",
+		"start:prod": "next start -p 80",
 		"export": "next export",
 		"now-build": "next build && next export -o dist"
 	},
