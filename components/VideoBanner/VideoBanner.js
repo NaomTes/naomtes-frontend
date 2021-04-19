@@ -115,8 +115,6 @@ function VideoBanner(props) {
               </Button>
               <Typography style={{ marginTop: '20px' }} className={clsx(classes.subtitle, text.subtitle)} variant="h6">
                 We'd like to hear from you!
-                 <br />
-                <span style={{ fontSize: '20px' }}>Let us know what you would like to chat about below.</span>
               </Typography>
             </div>
           </Grid>

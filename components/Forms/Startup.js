@@ -376,7 +376,8 @@ function Contact(props) {
       { id: 3, value: 'seriesA', checked: false, label: 'Series A' },
       { id: 4, value: 'seriesB', checked: false, label: 'Series B' },
       { id: 5, value: 'seriesC', checked: false, label: 'Series C' },
-      { id: 6, value: 'late_stage', checked: false, label: 'Late stage' }
+      { id: 6, value: 'late_stage', checked: false, label: 'Late stage' },
+      { id: 7, value: 'none', checked: false, label: 'None' }
     ],
     investment_category: [
       { id: 1, value: 'banking', checked: false, label: 'Banking' },
@@ -946,6 +947,7 @@ function Contact(props) {
                   <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="100K" id="2_100k" /> <label for="2_100k">$100,000-$500,000</label></div>
                   <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="500K" id="2_500k" /> <label for="2_500k">$500,000-$1,000,000</label></div>
                   <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="1M" id="2_1M" /> <label for="2_1M">Above $1M</label></div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="none" id="none_raised" /> <label for="none_raised">None</label></div>
                 </RadioGroup>
               </Grid>
 
@@ -1140,7 +1142,7 @@ function Contact(props) {
               </Grid>
             </Grid>
             <div style={{ marginTop: '50px' }} className={classes.btnArea}>
-              <Button disabled={loading} style={{ margin: 'auto' }} variant="outlined" type="submit" color="primary" size="large">
+              <Button disabled={loading} style={{ margin: 'auto' }} variant="outlined" type="submit" color="primary" size="large" style={{ backgroundColor: '#2196F3', color: 'white' }}>
                 Suggest Investors
               </Button>
             </div>

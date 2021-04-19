@@ -1079,7 +1079,7 @@ function Contact(props) {
               </Grid>
             </Grid>
             <div style={{ marginTop: '50px' }} className={classes.btnArea}>
-              <Button disabled={loading} style={{ margin: 'auto' }} variant="outlined" type="submit" color="primary" size="large">
+              <Button disabled={loading} style={{ margin: 'auto' }} variant="outlined" type="submit" color="primary" size="large" style={{ backgroundColor: '#2196F3', color: 'white' }}>
                 Suggest Startups
               </Button>
             </div>

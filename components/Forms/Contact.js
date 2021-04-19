@@ -145,7 +145,7 @@ function Contact(props) {
               </Grid>
             </Grid>
             <div className={classes.btnArea}>
-              <Button variant="outlined" type="submit" color="primary" size="large">
+              <Button variant="outlined" type="submit" size="large" style={{ backgroundColor: '#2196F3', color: 'white' }}>
                 {t('common:form_send')}
                 <SendIcon className={classes.rightIcon} />
               </Button>
