@@ -21,12 +21,12 @@ import useStyles from './form-style';
 import { adminLogin } from './api'
 
 function Contact(props) {
-  useEffect(function() {
-    const token = localStorage.getItem('token');
-    if (token && token != "null") {
-      router.push('/en/admin/dashboard');
-    }
-  },[]);
+  // useEffect(function() {
+  //   const token = localStorage.getItem('token');
+  //   if (token && token != "null") {
+  //     router.push('/en/admin/dashboard');
+  //   }
+  // },[]);
 
   const { t } = props;
   const classes = useStyles();
