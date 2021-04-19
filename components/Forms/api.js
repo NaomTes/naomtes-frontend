@@ -41,10 +41,32 @@ export function adminLogin(data) {
   })
 }
 
+export function contactUs(data) {
+  return request({
+    url: 'home/contact_us',
+    method: 'post',
+    data
+  });
+}
+
 export function bulkUploadData(data) {
   return userRequest({
     url: 'admins/bulk_upload_data',
     method: 'post',
     data
+  })
+}
+
+export function fetchInvestors() {
+  return userRequest({
+    url: 'admins/fetch_investors',
+    method: 'get'
+  })
+}
+
+export function fetchStartups() {
+  return userRequest({
+    url: 'admins/fetch_startups',
+    method: 'get'
   })
 }

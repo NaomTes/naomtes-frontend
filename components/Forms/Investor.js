@@ -684,12 +684,6 @@ function Contact(props) {
             }
           </div>
 
-          <Button onClick={() => {
-            handleSubmit()
-          }} disabled={loading} style={{ margin: 'auto', marginBottom: '15px', display: 'block', width: '80%' }} variant="outlined" color="primary" size="large">
-            Save Record
-        </Button>
-
           <Button disabled={loading} style={{ margin: 'auto', display: 'block', width: '80%' }} onClick={e => {
             setModal(false)
           }} variant="outlined" type="submit" color="primary" size="large">

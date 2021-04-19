@@ -18,7 +18,8 @@ import logo from '~public/images/logo-agency.png';
 import { withTranslation } from '~/i18n';
 import Checkbox from './Checkbox';
 import useStyles from './form-style';
-import { bulkUploadData } from './api'
+import { bulkUploadData, fetchInvestors, fetchStartups } from './api'
+import styles from '../../styles/Dashboard.module.css'
 
 import readXlsxFile from 'read-excel-file'
 import XLSX from 'xlsx';
@@ -26,6 +27,32 @@ import { Spinner, Modal as Modal2, Table } from 'react-bootstrap'
 import Modal from 'react-modal';
 import './style-pro.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+var investorAttributes = [
+  { label: 'First Name', attr: 'first_name' },
+  { label: 'Last Name', attr: 'last_name' },
+  { label: 'Email', attr: 'email' },
+  { label: 'Phone Number', attr: 'phone_number' },
+  { label: 'Website', attr: 'website' },
+  { label: 'Country', attr: 'country' },
+  { label: 'State', attr: 'state' },
+  { label: 'Syndicate Group', attr: 'syndicate_group' },
+  { label: 'Group Name', attr: 'group_name' },
+  { label: 'Organization Name', attr: 'organization_name' }
+]
+
+var startupAttributes = [
+  { label: 'First Name', attr: 'first_name' },
+  { label: 'Last Name', attr: 'last_name' },
+  { label: 'Email', attr: 'email' },
+  { label: 'Phone Number', attr: 'phone_number' },
+  { label: 'Website', attr: 'website' },
+  { label: 'Country', attr: 'country' },
+  { label: 'State', attr: 'state' },
+  { label: 'Company', attr: 'company_name' },
+  { label: 'Part Of Accelarator', attr: 'part_of_accelerator' },
+  { label: 'Accelarator', attr: 'accelarator_name' }
+]
 
 function AdminDashboard(props) {
   const { t }   = props;
@@ -39,15 +66,43 @@ function AdminDashboard(props) {
   const [notificationMsg, setNotificationMsg] = useState('');
   const [openNotif, setNotif]   = useState(false);
   const [modal, setModal]       = useState(false);
+  const [investorModal, setInvestorModal] = useState(false);
+  const [startupModal, setStartupModal] = useState(false);
   const [response, setResponse] = useState(null);
+  const [investorResponse, setInvestorResponse] = useState(null);
+  const [startupResponse, setStartupResponse] = useState(null);
   const [loading, setLoading]   = useState(false);
 
   useEffect(function() {
     const token = localStorage.getItem('token');
-    if (!token) {
+    if (!token || token == "null") {
       router.push('/en/login');
     }
   },[]);
+
+  function seeAllInvestors() {
+    fetchInvestors()
+      .then(response => {
+        setInvestorModal(true);
+        setInvestorResponse(response.data.investors);
+      })
+      .catch(errors => {
+        setNotif(true);
+        setNotificationMsg(errors.error);
+      });
+  }
+
+  function seeAllStartups() {
+    fetchStartups()
+      .then(response => {
+        setStartupModal(true);
+        setStartupResponse(response.data.startups);
+      })
+      .catch(errors => {
+        setNotif(true);
+        setNotificationMsg(errors.error);
+      });
+  }
 
   const handleSubmit = () => {
     const fileUpload = document.getElementById('file');
@@ -137,6 +192,77 @@ function AdminDashboard(props) {
           
         </Modal2.Body>
       </Modal2 >
+
+      <Modal2
+        show={investorModal}
+        backdrop="static"
+        keyboard={false}
+        size="xl"
+      >
+        <Modal2.Header>
+          <Modal2.Title>Investors</Modal2.Title>
+        </Modal2.Header>
+        <Modal2.Body>
+          <div style={{ margin: '0px 0px 30px 30px', maxHeight: '500px', overflowY: 'auto' }}>
+            <h3 style={{ marginTop: '20px' }}>Investors</h3>
+            <div className="resources-container">
+              {
+                investorResponse?.map((item, index) =>
+                  <div className="resource-container">
+                    {
+                      investorAttributes.map(attributes =>
+                        <div className="resource-item">
+                          <label>{ attributes['label'] }</label>
+                          <p>{ item[attributes['attr']] }</p>
+                        </div>
+                      )
+                    }
+                  </div>
+                )
+              }
+            </div>
+          </div>
+          <Button disabled={loading} style={{ margin: 'auto', display: 'block', width: '80%' }} onClick={ e => {
+            setInvestorModal(false) } } variant="outlined" type="submit" color="primary" size="large">
+            Back
+          </Button>
+        </Modal2.Body>
+      </Modal2 >
+
+      <Modal2
+        show={startupModal}
+        backdrop="static"
+        keyboard={false}
+        size="xl"
+      >
+        <Modal2.Header>
+          <Modal2.Title>Startups</Modal2.Title>
+        </Modal2.Header>
+        <Modal2.Body>
+          <div style={{ margin: '0px 0px 30px 30px', maxHeight: '500px', overflowY: 'auto' }}>
+            <div className="resources-container">
+              {
+                startupResponse?.map((item, index) =>
+                  <div className="resource-container">
+                    {
+                      startupAttributes.map(attributes =>
+                        <div className="resource-item">
+                          <label>{ attributes['label'] }</label>
+                          <p>{ item[attributes['attr']] }</p>
+                        </div>
+                      )
+                    }
+                  </div>
+                )
+              }
+            </div>
+          </div>
+          <Button disabled={loading} style={{ margin: 'auto', display: 'block', width: '80%' }} onClick={ e => {
+            setStartupModal(false) } } variant="outlined" type="submit" color="primary" size="large">
+            Back
+          </Button>
+        </Modal2.Body>
+      </Modal2 >
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         key="top right"
@@ -175,6 +301,16 @@ function AdminDashboard(props) {
               </Button>
             </div>
           </ValidatorForm>
+        </div>
+
+        <div className={classes.btnArea} style={{ marginTop: 0 }}>
+          <Button variant="outlined" type="button" color="primary" size="large" style={{ width: '30%', margin: 'auto', marginRight: '5%'}} onClick={ seeAllInvestors }>
+            See All Investors
+          </Button>
+
+          <Button variant="outlined" type="button" color="primary" size="large" style={{ width: '30%', margin: 'auto', marginLeft: '5%'}} onClick={ seeAllStartups }>
+            See All Startups
+          </Button>
         </div>
       </Container>
     </div>

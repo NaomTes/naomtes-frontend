@@ -461,6 +461,7 @@ function Contact(props) {
     accelarator_name: '',
     investment_rates: '',
     previous_investment_rates: '',
+    founders_information: '',
     investment_stages: [],
     last_investment_stages: [],
     investment_category: [],
@@ -691,12 +692,6 @@ function Contact(props) {
               )
             }
           </div>
-
-          <Button onClick={() => {
-            handleSubmit()
-          }} disabled={loading} style={{ margin: 'auto', marginBottom: '15px', display: 'block', width: '80%' }} variant="outlined" color="primary" size="large">
-            Save Record
-        </Button>
 
           <Button disabled={loading} style={{ margin: 'auto', display: 'block', width: '80%' }} onClick={e => {
             setModal(false)
@@ -946,10 +941,22 @@ function Contact(props) {
                   What is the total amount you / your group currently have raised? *
                 </span>
                 <RadioGroup name="previous_investment_rates" selectedValue={values.previous_investment_rates} onChange={handleRadioChange("previous_investment_rates")}>
-                  <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="25K" id="2_25K" /> <label for="2_25K">$25,000-$100,000</label></div>
+                  <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="0" id="1_0K" /> <label for="1_0K">We haven't raised any fund yet</label></div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="25K" id="2_25K" /> <label for="2_25K">$25,000-$100,000</label></div>
                   <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="100K" id="2_100k" /> <label for="2_100k">$100,000-$500,000</label></div>
                   <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="500K" id="2_500k" /> <label for="2_500k">$500,000-$1,000,000</label></div>
                   <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="1M" id="2_1M" /> <label for="2_1M">Above $1M</label></div>
+                </RadioGroup>
+              </Grid>
+
+              <Grid item xs={12}>
+                <span style={{ fontSize: '15px', marginTop: '10px', marginBottom: '10px', display: 'block', color: `${formikHook && values.founders_information == '' ? 'red' : 'black'}` }}>
+                  Founders Information *
+                </span>
+                <RadioGroup name="founders_information" selectedValue={values.founders_information} onChange={handleRadioChange("founders_information")}>
+                  <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="women" id="women" /> <label for="women">Women</label></div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="minority" id="minority" /> <label for="minority">Minority</label></div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="women_and_minority" id="women_and_minority" /> <label for="women_and_minority">Women and Minority</label></div>
                 </RadioGroup>
               </Grid>
 
