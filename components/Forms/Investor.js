@@ -418,10 +418,13 @@ function Contact(props) {
       { id: 10, value: 'others', checked: false, label: 'Others' },
     ]
   }
-  const [all, setAllValue] = useState(defaultValues)
-  const [modal, setModal] = useState(false)
+  const [all, setAllValue]      = useState(defaultValues)
+  const [modal, setModal]       = useState(false)
   const [response, setResponse] = useState(null)
-
+  const [investmentIndustryOther, setInvestmentIndustryOther]                 = useState(false)
+  const [investmentCategoryOther, setInvestmentCategoryOther]                 = useState(false)
+  const [emergingTechnologyOther, setEmergingTechnologyOther]       = useState(false)
+  const [previousEmergingTechnologyOther, setPreviousEmergingTechnologyOther] = useState(false)
 
   const defaultQuery = {
     investment_stages: 5,
@@ -459,8 +462,10 @@ function Contact(props) {
     previous_emerging_technologies: [],
     founder_type: '',
     about_us: '',
-
-
+    investment_industry_other: '',
+    investment_category_other: '',
+    emerging_technology_other: '',
+    previous_emerging_technology_other: '',
     startup_selected: []
   }
 
@@ -495,7 +500,7 @@ function Contact(props) {
       }
     }
 
-    if (values.investment_stages.length == 0 || values.investment_category.length == 0 || values.emerging_technologies.length == 0 || values.last_investment_stages.length == 0 || values.previous_emerging_technologies.length == 0 || values.investment_industry.length == 0) {
+    if (values.investment_stages.length == 0 || values.last_investment_stages.length == 0) {
       setNotif(true);
       setNotificationMsg("Please fill out the missing fields!")
       return true
@@ -518,7 +523,7 @@ function Contact(props) {
 
     setLoading(true)
 
-    createInvestor({ investors: values })
+    createInvestor({ investor: values })
       .then(response => {
         console.log("response -> ", response)
         setNotif(true);
@@ -619,6 +624,34 @@ function Contact(props) {
     setValues({ ...values, [name]: filtered_array.map(item => item.value) })
   }
 
+  let handleInvestmentIndustry = (payload, item_id) => {
+    if (item_id == 9) {
+      investmentIndustryOther ? setInvestmentIndustryOther(false) : setInvestmentIndustryOther(true)
+    }
+    handleCheckBoxesSelect("investment_industry", payload, item_id)
+  }
+
+  let handleInvestmentCategory = (payload, item_id) => {
+    if (item_id == 9) {
+      investmentCategoryOther ? setInvestmentCategoryOther(false) : setInvestmentCategoryOther(true)
+    }
+    handleCheckBoxesSelect("investment_category", payload, item_id)
+  }
+
+  let handleEmergingTechnology = (payload, item_id) => {
+    if (item_id == 10) {
+      emergingTechnologyOther ? setEmergingTechnologyOther(false) : setEmergingTechnologyOther(true)
+    }
+    handleCheckBoxesSelect("emerging_technologies", payload, item_id)
+  }
+
+  let handlePreviousEmergingTechnology = (payload, item_id) => {
+    if (item_id == 10) {
+      previousEmergingTechnologyOther ? setPreviousEmergingTechnologyOther(false) : setPreviousEmergingTechnologyOther(true)
+    }
+    handleCheckBoxesSelect("previous_emerging_technologies", payload, item_id)
+  }
+
   // let handleRatings = (newRating, name) => {
   //   setQuery({ ...query, [name]: newRating + 1 })
   // }
@@ -654,7 +687,7 @@ function Contact(props) {
         <Modal2.Body>
           <div style={{ margin: '0px 0px 30px 30px' }}>
             {response?.length == 0 ?
-              <h3 style={{ marginTop: '40px' }}>No Startups are added in the system</h3>
+              <h3 style={{ marginTop: '40px' }}>No matches were found.</h3>
               : <h3 style={{ marginTop: '20px' }}>These are your potential startups matches</h3>
             }
 
@@ -757,7 +790,7 @@ function Contact(props) {
                   name="phone_number"
                   value={values.phone_number}
                   validators={['matchRegexp:^[+][0-9]*$']}
-                  errorMessages={['Only numbers are allowed']}
+                  errorMessages={['Only numbers and "+" sign is allowed']}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -873,7 +906,7 @@ function Contact(props) {
 
               <Grid style={{ paddingTop: '0px' }} item xs={12}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.last_investment_stages.length == 0 ? 'red' : 'black'}` }}>
-                  What was the last equity investment round you invested? *
+                  What was the last equity investment round you invested? (Please select ALL that apply.) *
                 </span>
 
                 {all.last_investment_stages.map(stage =>
@@ -918,7 +951,8 @@ function Contact(props) {
 
               <Grid style={{ paddingTop: '0px' }} item xs={12}>
                 <RadioGroup name="investment_rates" selectedValue={values.investment_rates} onChange={handleRadioChange("investment_rates")}>
-                  <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="25K" id="1_25K" /> <label for="1_25K">$25,000-$100,000</label></div>
+                  <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="0" id="1_0K" /> <label for="1_0K">0-$25,000</label></div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="25K" id="1_25K" /> <label for="1_25K">$25,000-$100,000</label></div>
                   <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="100K" id="1_100k" /> <label for="1_100k">$100,000-$500,000</label></div>
                   <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="500K" id="1_500k" /> <label for="1_500k">$500,000-$1,000,000</label></div>
                   <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="1M" id="1_1M" /> <label for="1_1M">Above $1M</label></div>
@@ -927,7 +961,7 @@ function Contact(props) {
 
               <Grid style={{ paddingRight: '0px' }} item xs={12}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_category.length == 0 ? 'red' : 'black'}` }}>
-                  Which category would you be interested to invest in? (Please select ALL that apply.) *
+                  Which category would you be interested to invest in? (Please select ALL that apply.)
                 </span>
               </Grid>
 
@@ -952,7 +986,7 @@ function Contact(props) {
                       <Checkbox
                         checked={category.checked}
                         value={category.value}
-                        onChange={() => handleCheckBoxesSelect("investment_category", all.investment_category, category.id)}
+                        onChange={() => handleInvestmentCategory(all.investment_category, category.id)}
                         color="black"
                       />
                     )}
@@ -964,11 +998,19 @@ function Contact(props) {
                   /></div>
                 )
                 }
+                <TextValidator
+                  className={classes.input}
+                  hidden={!investmentCategoryOther}
+                  label={"Please specifiy others"}
+                  onChange={handleChange('investment_category_other')}
+                  name="investment_category_other"
+                  value={values.investment_category_other}
+                />
               </Grid>
 
               <Grid item xs={12}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_industry.length == 0 ? 'red' : 'black'}` }}>
-                  Previous investment Industry? (Please select ALL that apply.) *
+                  Previous investment Industry? (Please select ALL that apply.)
                 </span>
 
                 {all.investment_industry.map(industry =>
@@ -978,7 +1020,7 @@ function Contact(props) {
                       <Checkbox
                         checked={industry.checked}
                         value={industry.value}
-                        onChange={() => handleCheckBoxesSelect("investment_industry", all.investment_industry, industry.id)}
+                        onChange={() => handleInvestmentIndustry(all.investment_industry, industry.id)}
                         color="black"
                       />
                     )}
@@ -990,6 +1032,14 @@ function Contact(props) {
                   /></div>
                 )
                 }
+                <TextValidator
+                  className={classes.input}
+                  hidden={!investmentIndustryOther}
+                  label={"Please specifiy others"}
+                  onChange={handleChange('investment_industry_other')}
+                  name="investment_industry_other"
+                  value={values.investment_industry_other}
+                />
               </Grid>
 
               <Grid style={{ paddingRight: '0px' }} item xs={12}>
@@ -1020,7 +1070,7 @@ function Contact(props) {
                       <Checkbox
                         checked={technology.checked}
                         value={technology.value}
-                        onChange={() => handleCheckBoxesSelect("emerging_technologies", all.emerging_technologies, technology.id)}
+                        onChange={() => handleEmergingTechnology(all.emerging_technologies, technology.id)}
                         color="black"
                       />
                     )}
@@ -1032,11 +1082,19 @@ function Contact(props) {
                   /></div>
                 )
                 }
+                <TextValidator
+                  className={classes.input}
+                  hidden={!emergingTechnologyOther}
+                  label={"Please specifiy others"}
+                  onChange={handleChange('emerging_technology_other')}
+                  name="emerging_technology_other"
+                  value={values.emerging_technology_other}
+                />
               </Grid>
 
               <Grid item xs={12}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.previous_emerging_technologies.length == 0 ? 'red' : 'black'}` }}>
-                  Have you previously invested in the following emerging technologies? (Please select ALL that apply)*
+                  Have you previously invested in the following emerging technologies? (Please select ALL that apply)
                 </span>
 
                 {all.previous_emerging_technologies.map(technology =>
@@ -1046,7 +1104,7 @@ function Contact(props) {
                       <Checkbox
                         checked={technology.checked}
                         value={technology.value}
-                        onChange={() => handleCheckBoxesSelect("previous_emerging_technologies", all.previous_emerging_technologies, technology.id)}
+                        onChange={() => handlePreviousEmergingTechnology(all.previous_emerging_technologies, technology.id)}
                         color="black"
                       />
                     )}
@@ -1058,6 +1116,14 @@ function Contact(props) {
                   /></div>
                 )
                 }
+                <TextValidator
+                  className={classes.input}
+                  hidden={!previousEmergingTechnologyOther}
+                  label={"Please specifiy others"}
+                  onChange={handleChange('previous_emerging_technology_other')}
+                  name="previous_emerging_technology_other"
+                  value={values.previous_emerging_technology_other}
+                />
               </Grid>
               <Grid item xs={12}>
                 <TextValidator

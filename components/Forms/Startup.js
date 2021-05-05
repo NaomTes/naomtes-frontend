@@ -469,14 +469,22 @@ function Contact(props) {
     investment_industry: [],
     emerging_technologies: [],
     previous_emerging_technologies: [],
+    previous_emerging_technology_other: '',
+    investment_category_other: '',
+    investment_industry_other: '',
+    emerging_technology_other: '',
     investor_type: '',
     value_preposition: '',
     competitors: '',
     additional_comments: '',
     about_us: '',
-
     investor_selected: []
   }
+
+  const [previousEmergingTechnologyOther, setPreviousEmergingTechnologyOther] = useState(false)
+  const [investmentIndustryOther, setInvestmentIndustryOther]                 = useState(false)
+  const [investmentCategoryOther, setInvestmentCategoryOther]                 = useState(false)
+  const [emergingTechnologyOther, setEmergingTechnologyOther]                 = useState(false)
 
   const [values, setValues] = useState(defaultObject);
 
@@ -509,7 +517,7 @@ function Contact(props) {
       }
     }
 
-    if (values.investment_stages.length == 0 || values.investment_category.length == 0 || values.emerging_technologies.length == 0 || values.last_investment_stages.length == 0 || values.previous_emerging_technologies.length == 0 || values.investment_industry.length == 0) {
+    if (values.investment_stages.length == 0 || values.investment_category.length == 0 || values.emerging_technologies.length == 0 || values.last_investment_stages.length == 0) {
       setNotif(true);
       setNotificationMsg("Please fill out the missing fields!")
       return true
@@ -532,7 +540,7 @@ function Contact(props) {
 
     setLoading(true)
 
-    createStartup({ startups: values })
+    createStartup({ startup: values })
       .then(response => {
         console.log("response -> ", response)
         setNotif(true);
@@ -586,6 +594,34 @@ function Contact(props) {
 
     let filtered_array = new_array.filter(item => item.checked == true)
     setValues({ ...values, [name]: filtered_array.map(item => item.value) })
+  }
+
+  let handlePreviousEmergingTechnology = (payload, item_id) => {
+    if (item_id == 11) {
+      previousEmergingTechnologyOther ? setPreviousEmergingTechnologyOther(false) : setPreviousEmergingTechnologyOther(true)
+    }
+    handleCheckBoxesSelect('previous_emerging_technologies', payload, item_id)
+  }
+
+  let handleInvestmentIndustry = (payload, item_id) => {
+    if (item_id == 9) {
+      investmentIndustryOther ? setInvestmentIndustryOther(false) : setInvestmentIndustryOther(true)
+    }
+    handleCheckBoxesSelect('investment_industry', payload, item_id)
+  }
+
+  let handleInvestmentCategory = (payload, item_id) => {
+    if (item_id == 9) {
+      investmentCategoryOther ? setInvestmentCategoryOther(false) : setInvestmentCategoryOther(true)
+    }
+    handleCheckBoxesSelect('investment_category', payload, item_id)
+  }
+
+  let handleEmergingTechnology = (payload, item_id) => {
+    if (item_id == 11) {
+      emergingTechnologyOther ? setEmergingTechnologyOther(false) : setEmergingTechnologyOther(true)
+    }
+    handleCheckBoxesSelect('emerging_technologies', payload, item_id)
   }
 
   // let handleRatings = (newRating, name) => {
@@ -668,7 +704,7 @@ function Contact(props) {
         <Modal2.Body>
           <div style={{ margin: '0px 0px 30px 30px' }}>
             {response?.length == 0 ?
-              <h3 style={{ marginTop: '40px' }}>No Investors are added in the system</h3>
+              <h3 style={{ marginTop: '40px' }}>No matches were found.</h3>
               : <h3 style={{ marginTop: '20px' }}>These are your potential investors matches</h3>
             }
 
@@ -766,7 +802,7 @@ function Contact(props) {
                   onChange={handleChange('phone_number')}
                   name="phone_number"
                   validators={['matchRegexp:^[+][0-9]*$']}
-                  errorMessages={['Only numbers are allowed']}
+                  errorMessages={['Only numbers and "+" sign is allowed']}
                   value={values.phone_number}
                 />
               </Grid>
@@ -844,7 +880,7 @@ function Contact(props) {
 
               <Grid item xs={12}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_stages.length == 0 ? 'red' : 'black'}` }}>
-                  What stage are you currently in? *
+                  What stage are you currently in? (Please select ALL that apply.) *
                 </span>
               </Grid>
 
@@ -885,7 +921,7 @@ function Contact(props) {
 
               <Grid item xs={12}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.last_investment_stages.length == 0 ? 'red' : 'black'}` }}>
-                  What was the last type of funding you raised?*
+                  What was the last type of funding you raised? (Please select ALL that apply.) *
                 </span>
 
                 {all.last_investment_stages.map(stage =>
@@ -930,7 +966,8 @@ function Contact(props) {
 
               <Grid style={{ paddingTop: '0px' }} item xs={12}>
                 <RadioGroup name="investment_rates" selectedValue={values.investment_rates} onChange={handleRadioChange("investment_rates")}>
-                  <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="25K" id="1_25K" /> <label for="1_25K">$25,000-$100,000</label></div>
+                  <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="0" id="1_0K" /> <label htmlFor="1_0K">0-$25,000</label></div>
+                  <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="25K" id="1_25K" /> <label for="1_25K">$25,000-$100,000</label></div>
                   <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="100K" id="1_100k" /> <label for="1_100k">$100,000-$500,000</label></div>
                   <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="500K" id="1_500k" /> <label for="1_500k">$500,000-$1,000,000</label></div>
                   <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="1M" id="1_1M" /> <label for="1_1M">Above $1M</label></div>
@@ -942,7 +979,7 @@ function Contact(props) {
                   What is the total amount you / your group currently have raised? *
                 </span>
                 <RadioGroup name="previous_investment_rates" selectedValue={values.previous_investment_rates} onChange={handleRadioChange("previous_investment_rates")}>
-                  <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="0" id="1_0K" /> <label for="1_0K">We haven't raised any fund yet</label></div>
+                  <div style={{ marginTop: '15px', fontSize: '15px' }}><Radio value="0" id="2_0K" /> <label for="2_0K">We haven't raised any fund yet</label></div>
                   <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="25K" id="2_25K" /> <label for="2_25K">$25,000-$100,000</label></div>
                   <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="100K" id="2_100k" /> <label for="2_100k">$100,000-$500,000</label></div>
                   <div style={{ marginTop: '10px', fontSize: '15px' }}><Radio value="500K" id="2_500k" /> <label for="2_500k">$500,000-$1,000,000</label></div>
@@ -989,7 +1026,7 @@ function Contact(props) {
                       <Checkbox
                         checked={category.checked}
                         value={category.value}
-                        onChange={() => handleCheckBoxesSelect("investment_category", all.investment_category, category.id)}
+                        onChange={() => handleInvestmentCategory(all.investment_category, category.id)}
                         color="black"
                       />
                     )}
@@ -1001,11 +1038,19 @@ function Contact(props) {
                   /></div>
                 )
                 }
+                <TextValidator
+                  className={classes.input}
+                  hidden={!investmentCategoryOther}
+                  label={"Please specifiy others"}
+                  onChange={handleChange('investment_category_other')}
+                  name="investment_category_other"
+                  value={values.investment_category_other}
+                />
               </Grid>
 
               <Grid item xs={12}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.investment_industry.length == 0 ? 'red' : 'black'}` }}>
-                  Previous startups Industry? Select ALL that applies. *
+                  Previous startups Industry? (Please select ALL that apply.)
                 </span>
 
                 {all.investment_industry.map(industry =>
@@ -1015,7 +1060,7 @@ function Contact(props) {
                       <Checkbox
                         checked={industry.checked}
                         value={industry.value}
-                        onChange={() => handleCheckBoxesSelect("investment_industry", all.investment_industry, industry.id)}
+                        onChange={() => handleInvestmentIndustry(all.investment_industry, industry.id)}
                         color="black"
                       />
                     )}
@@ -1027,6 +1072,14 @@ function Contact(props) {
                   /></div>
                 )
                 }
+                <TextValidator
+                  className={classes.input}
+                  hidden={!investmentIndustryOther}
+                  label={"Please specifiy others"}
+                  onChange={handleChange('investment_industry_other')}
+                  name="investment_industry_other"
+                  value={values.investment_industry_other}
+                />
               </Grid>
 
               <Grid item xs={12}>
@@ -1056,7 +1109,7 @@ function Contact(props) {
                       <Checkbox
                         checked={technology.checked}
                         value={technology.value}
-                        onChange={() => handleCheckBoxesSelect("emerging_technologies", all.emerging_technologies, technology.id)}
+                        onChange={() => handleEmergingTechnology(all.emerging_technologies, technology.id)}
                         color="black"
                       />
                     )}
@@ -1068,11 +1121,19 @@ function Contact(props) {
                   /></div>
                 )
                 }
+                <TextValidator
+                  className={classes.input}
+                  hidden={!emergingTechnologyOther}
+                  label={"Please specifiy others"}
+                  onChange={handleChange('emerging_technology_other')}
+                  name="emerging_technology_other"
+                  value={values.emerging_technology_other}
+                />
               </Grid>
 
               <Grid item xs={12}>
                 <span style={{ fontSize: '15px', marginTop: '20px', marginBottom: '10px', display: 'block', color: `${formikHook && values.previous_emerging_technologies.length == 0 ? 'red' : 'black'}` }}>
-                  Have you previously founded companies in the following emerging technologies? Select ALL that applies. *
+                  Have you previously founded companies in the following emerging technologies? (Please select ALL that apply.)
                 </span>
 
                 {all.previous_emerging_technologies.map(technology =>
@@ -1082,7 +1143,7 @@ function Contact(props) {
                       <Checkbox
                         checked={technology.checked}
                         value={technology.value}
-                        onChange={() => handleCheckBoxesSelect("previous_emerging_technologies", all.previous_emerging_technologies, technology.id)}
+                        onChange={() => handlePreviousEmergingTechnology(all.previous_emerging_technologies, technology.id)}
                         color="black"
                       />
                     )}
@@ -1094,23 +1155,13 @@ function Contact(props) {
                   /></div>
                 )
                 }
-              </Grid>
-              <Grid item xs={12}>
                 <TextValidator
                   className={classes.input}
-                  label={"What type of investors are you looking for?"}
-                  onChange={handleChange('investor_type')}
-                  name="investor_type"
-                  value={values.investor_type}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextValidator
-                  className={classes.input}
-                  label={"Any additional comments you would like us to know ?"}
-                  onChange={handleChange('additional_comments')}
-                  name="additional_comments"
-                  value={values.additional_comments}
+                  hidden={!previousEmergingTechnologyOther}
+                  label={"Please specifiy others"}
+                  onChange={handleChange('previous_emerging_technology_other')}
+                  name="previous_emerging_technology_other"
+                  value={values.previous_emerging_technology_other}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -1129,6 +1180,24 @@ function Contact(props) {
                   onChange={handleChange('competitors')}
                   name="competitors"
                   value={values.competitors}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextValidator
+                  className={classes.input}
+                  label={"What type of investors are you looking for?"}
+                  onChange={handleChange('investor_type')}
+                  name="investor_type"
+                  value={values.investor_type}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextValidator
+                  className={classes.input}
+                  label={"Any additional comments you would like us to know ?"}
+                  onChange={handleChange('additional_comments')}
+                  name="additional_comments"
+                  value={values.additional_comments}
                 />
               </Grid>
               <Grid item xs={12}>
