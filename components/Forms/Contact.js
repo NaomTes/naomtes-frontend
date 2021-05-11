@@ -99,8 +99,8 @@ function Contact(props) {
                   onChange={handleChange('name')}
                   name="Name"
                   value={values.name}
-                  validators={['required']}
-                  errorMessages={['This field is required']}
+                  validators={['required', 'maxStringLength: 255']}
+                  errorMessages={['This field is required', 'Max character limit is 255']}
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
@@ -110,8 +110,8 @@ function Contact(props) {
                   onChange={handleChange('email')}
                   name="Email"
                   value={values.email}
-                  validators={['required', 'isEmail']}
-                  errorMessages={['This field is required', 'email is not valid']}
+                  validators={['required', 'isEmail', 'maxStringLength: 255']}
+                  errorMessages={['This field is required', 'email is not valid', 'Max character limit is 255']}
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
@@ -120,6 +120,8 @@ function Contact(props) {
                   label={t('Phone Number')}
                   onChange={handleChange('phone')}
                   name="Phone"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.phone}
                 />
               </Grid>
@@ -129,6 +131,8 @@ function Contact(props) {
                   label={'Company'}
                   onChange={handleChange('company')}
                   name="Company"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.company}
                 />
               </Grid>

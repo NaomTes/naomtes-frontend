@@ -780,8 +780,8 @@ function Contact(props) {
                   onChange={handleChange('first_name')}
                   name="first_name"
                   value={values.first_name}
-                  validators={['required', 'matchRegexp:^[a-zA-Z ]*$']}
-                  errorMessages={['This field is required', 'Only words are allowed']}
+                  validators={['required', 'matchRegexp:^[a-zA-Z ]*$', 'maxStringLength: 255']}
+                  errorMessages={['This field is required', 'Only words are allowed', 'Max character limit is 255']}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -791,8 +791,8 @@ function Contact(props) {
                   onChange={handleChange('last_name')}
                   name="last_name"
                   value={values.last_name}
-                  validators={['required', 'matchRegexp:^[a-zA-Z ]*$']}
-                  errorMessages={['This field is required', 'Only words are allowed']}
+                  validators={['required', 'matchRegexp:^[a-zA-Z ]*$', 'maxStringLength: 255']}
+                  errorMessages={['This field is required', 'Only words are allowed', 'Max character limit is 255']}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -801,8 +801,8 @@ function Contact(props) {
                   label={"Phone Number"}
                   onChange={handleChange('phone_number')}
                   name="phone_number"
-                  validators={['matchRegexp:^[+][0-9]*$']}
-                  errorMessages={['Only numbers and "+" sign is allowed']}
+                  validators={['matchRegexp:^[+][0-9]*$', 'maxStringLength: 255']}
+                  errorMessages={['Only numbers and "+" sign is allowed', 'Max character limit is 255']}
                   value={values.phone_number}
                 />
               </Grid>
@@ -813,8 +813,8 @@ function Contact(props) {
                   onChange={handleChange('email')}
                   name="email"
                   value={values.email}
-                  validators={['required', 'isEmail']}
-                  errorMessages={['This field is required']}
+                  validators={['required', 'isEmail', 'maxStringLength: 255']}
+                  errorMessages={['This field is required', 'Max character limit is 255']}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -824,8 +824,8 @@ function Contact(props) {
                   onChange={handleChange('company_name')}
                   name="company_name"
                   value={values.company_name}
-                  validators={['required']}
-                  errorMessages={['This field is required']}
+                  validators={['required', 'maxStringLength: 255']}
+                  errorMessages={['This field is required', 'Max character limit is 255']}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -834,6 +834,8 @@ function Contact(props) {
                   label={"URL"}
                   onChange={handleChange('website')}
                   name="website"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.website}
                 />
               </Grid>
@@ -874,6 +876,8 @@ function Contact(props) {
                   label={"What is the name of your accelerator?"}
                   onChange={handleChange('accelarator_name')}
                   name="accelarator_name"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.accelarator_name}
                 />
               </Grid>
@@ -1044,6 +1048,8 @@ function Contact(props) {
                   label={"Please specifiy others"}
                   onChange={handleChange('investment_category_other')}
                   name="investment_category_other"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.investment_category_other}
                 />
               </Grid>
@@ -1078,6 +1084,8 @@ function Contact(props) {
                   label={"Please specifiy others"}
                   onChange={handleChange('investment_industry_other')}
                   name="investment_industry_other"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.investment_industry_other}
                 />
               </Grid>
@@ -1127,6 +1135,8 @@ function Contact(props) {
                   label={"Please specifiy others"}
                   onChange={handleChange('emerging_technology_other')}
                   name="emerging_technology_other"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.emerging_technology_other}
                 />
               </Grid>
@@ -1161,6 +1171,8 @@ function Contact(props) {
                   label={"Please specifiy others"}
                   onChange={handleChange('previous_emerging_technology_other')}
                   name="previous_emerging_technology_other"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.previous_emerging_technology_other}
                 />
               </Grid>
@@ -1170,6 +1182,8 @@ function Contact(props) {
                   label={"Describe your product and value proposition. Describe your startup in 3-4 sentences."}
                   onChange={handleChange('value_preposition')}
                   name="value_preposition"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.value_preposition}
                 />
               </Grid>
@@ -1179,6 +1193,8 @@ function Contact(props) {
                   label={"Describe briefly 2-3 competitors and what makes you different?"}
                   onChange={handleChange('competitors')}
                   name="competitors"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.competitors}
                 />
               </Grid>
@@ -1188,6 +1204,8 @@ function Contact(props) {
                   label={"What type of investors are you looking for?"}
                   onChange={handleChange('investor_type')}
                   name="investor_type"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.investor_type}
                 />
               </Grid>
@@ -1197,6 +1215,8 @@ function Contact(props) {
                   label={"Any additional comments you would like us to know ?"}
                   onChange={handleChange('additional_comments')}
                   name="additional_comments"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.additional_comments}
                 />
               </Grid>
@@ -1206,6 +1226,8 @@ function Contact(props) {
                   label={"Where did you hear about us?"}
                   onChange={handleChange('about_us')}
                   name="about_us"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.about_us}
                 />
               </Grid>

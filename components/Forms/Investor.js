@@ -767,8 +767,8 @@ function Contact(props) {
                   onChange={handleChange('first_name')}
                   name="first_name"
                   value={values.first_name}
-                  validators={['required', 'matchRegexp:^[a-zA-Z ]*$']}
-                  errorMessages={['This field is required', 'Only words are allowed']}
+                  validators={['required', 'matchRegexp:^[a-zA-Z ]*$', 'maxStringLength: 255']}
+                  errorMessages={['This field is required', 'Only words are allowed', 'Max character limit is 255']}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -778,8 +778,8 @@ function Contact(props) {
                   onChange={handleChange('last_name')}
                   name="last_name"
                   value={values.last_name}
-                  validators={['required', 'matchRegexp:^[a-zA-Z ]*$']}
-                  errorMessages={['This field is required', 'Only words are allowed']}
+                  validators={['required', 'matchRegexp:^[a-zA-Z ]*$', 'maxStringLength: 255']}
+                  errorMessages={['This field is required', 'Only words are allowed', 'Max character limit is 255']}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -789,8 +789,8 @@ function Contact(props) {
                   onChange={handleChange('phone_number')}
                   name="phone_number"
                   value={values.phone_number}
-                  validators={['matchRegexp:^[+][0-9]*$']}
-                  errorMessages={['Only numbers and "+" sign is allowed']}
+                  validators={['matchRegexp:^[+][0-9]*$', 'maxStringLength: 255']}
+                  errorMessages={['Only numbers and "+" sign is allowed', 'Max character limit is 255']}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -800,8 +800,8 @@ function Contact(props) {
                   onChange={handleChange('email')}
                   name="email"
                   value={values.email}
-                  validators={['required', 'isEmail']}
-                  errorMessages={['This field is required']}
+                  validators={['required', 'isEmail', 'maxStringLength: 255']}
+                  errorMessages={['This field is required', 'Max character limit is 255']}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -809,6 +809,8 @@ function Contact(props) {
                   className={classes.input}
                   label={"Website"}
                   onChange={handleChange('website')}
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   name="website"
                   value={values.website}
                 />
@@ -849,6 +851,8 @@ function Contact(props) {
                   label={"What is the name of your group?"}
                   onChange={handleChange('group_name')}
                   name="group_name"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.group_name}
                 />
               </Grid>
@@ -859,6 +863,8 @@ function Contact(props) {
                   label={"Organization Name"}
                   onChange={handleChange('organization_name')}
                   name="organization_name"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.organization_name}
                 />
               </Grid>
@@ -1004,6 +1010,8 @@ function Contact(props) {
                   label={"Please specifiy others"}
                   onChange={handleChange('investment_category_other')}
                   name="investment_category_other"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.investment_category_other}
                 />
               </Grid>
@@ -1038,6 +1046,8 @@ function Contact(props) {
                   label={"Please specifiy others"}
                   onChange={handleChange('investment_industry_other')}
                   name="investment_industry_other"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.investment_industry_other}
                 />
               </Grid>
@@ -1088,6 +1098,8 @@ function Contact(props) {
                   label={"Please specifiy others"}
                   onChange={handleChange('emerging_technology_other')}
                   name="emerging_technology_other"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.emerging_technology_other}
                 />
               </Grid>
@@ -1122,6 +1134,8 @@ function Contact(props) {
                   label={"Please specifiy others"}
                   onChange={handleChange('previous_emerging_technology_other')}
                   name="previous_emerging_technology_other"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.previous_emerging_technology_other}
                 />
               </Grid>
@@ -1131,6 +1145,8 @@ function Contact(props) {
                   label={"What type of founders are you looking for?"}
                   onChange={handleChange('founder_type')}
                   name="founder_type"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.founder_type}
                 />
               </Grid>
@@ -1140,6 +1156,8 @@ function Contact(props) {
                   label={"Where did you hear about us?"}
                   onChange={handleChange('about_us')}
                   name="about_us"
+                  validators={['maxStringLength: 255']}
+                  errors={['Max character limit is 255']}
                   value={values.about_us}
                 />
               </Grid>
