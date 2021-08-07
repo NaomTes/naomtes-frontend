@@ -193,9 +193,11 @@ function Footer(props) {
             <IconButton aria-label="IG" className={classes.margin} size="small">
               <i className="ion-social-instagram" />
             </IconButton>
-            <IconButton aria-label="LI" className={classes.margin} size="small">
-              <i className="ion-social-linkedin" />
-            </IconButton>
+            <Link href='https://www.linkedin.com/company/72192369'>
+              <IconButton aria-label="LI" className={classes.margin} size="small">
+                <i className="ion-social-linkedin" />
+              </IconButton>
+            </Link>
           </div>
           <Select
             value={values.lang}
